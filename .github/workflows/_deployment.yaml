@@ -12,8 +12,8 @@ on:
 
 env:
   GCP_PROJECT: r253-dev
-  ARTIFACT_REPOSITORY: nest-development
-  CLOUD_RUN_SERVICE: nest-development
+  ARTIFACT_REPOSITORY: nest-${{ inputs.environment }}
+  CLOUD_RUN_SERVICE: nest-${{ inputs.environment }}
   IMAGE_NAME: nest-${{ inputs.environment }}
 
 jobs:
