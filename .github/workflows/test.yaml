@@ -1,0 +1,51 @@
+# https://help.github.com/en/articles/workflow-syntax-for-github-actions
+
+on: pull_request
+name: test
+jobs:
+  test:
+    name: test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-20.04
+        nodejs:
+          - 20.11.1
+      fail-fast: false
+    steps:
+      - name: Checkout source codes
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref}}
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.nodejs }}
+
+      - name: Output versions
+        run: |
+          node -v
+          npm -v
+
+      - name: Cache node modules # https://docs.github.com/ja/actions/guides/caching-dependencies-to-speed-up-workflows
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: test
+        run: npm run test
+
+      - name: test:e2e
+        run: npm run test:e2e
