@@ -14,16 +14,6 @@ jobs:
       environment: dev
       ref: ${{ github.sha }}
     secrets: inherit
-  stage:
-    if: ${{ github.ref == 'refs/heads/stage' || github.base_ref == 'stage' }}
-    uses: ./.github/workflows/_deployment.yaml
-    permissions:
-      id-token: write
-      contents: read
-    with:
-      environment: stage
-      ref: ${{ github.sha }}
-    secrets: inherit
   prod:
     if: ${{ github.ref == 'refs/heads/main' || github.base_ref == 'main' }}
     uses: ./.github/workflows/_deployment.yaml
