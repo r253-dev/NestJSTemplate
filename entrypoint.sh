@@ -1,4 +1,4 @@
 #!/bin/sh
 set -eu
 
-npm run start:prod
+node dist/server/main.js
