@@ -14,7 +14,6 @@ env:
   GCP_PROJECT: r253-dev
   ARTIFACT_REPOSITORY: nest-development
   IMAGE_NAME: nest-${{ inputs.environment }}
-  FULL_IMAGE_NAME: asia-northeast2-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.ARTIFACT_REPOSITORY }}/${{ env.IMAGE_NAME }}
 
 jobs:
   deploy:
@@ -40,8 +39,8 @@ jobs:
 
       - name: Build
         run: |
-          docker build -t ${{ env.FULL_IMAGE_NAME }} ./
+          docker build -t asia-northeast2-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.ARTIFACT_REPOSITORY }}/${{ env.IMAGE_NAME }} ./
 
       - name: Push
         run: |
-          docker push ${{ env.FULL_IMAGE_NAME }}
+          docker push asia-northeast2-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.ARTIFACT_REPOSITORY }}/${{ env.IMAGE_NAME }}
