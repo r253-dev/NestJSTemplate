@@ -1,0 +1,47 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: template-db
+    hostname: template-db
+    networks:
+      - template
+    volumes:
+      - nestjs-template-mysql-data:/var/lib/mysql
+    ports:
+      - '3306:3306'
+    environment:
+      tz: UTC
+      MYSQL_DATABASE: 'nestjs_local'
+      MYSQL_USER: 'nestjs_local'
+      MYSQL_PASSWORD: 'nestjs_local'
+      MYSQL_ROOT_PASSWORD: 'password'
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    healthcheck:
+      test: ['CMD-SHELL', "mysqladmin ping -ppassword | grep 'mysqld is alive'"]
+      timeout: 10s
+      retries: 10
+
+  api:
+    depends_on:
+      db:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: local/Dockerfile.local
+    container_name: template-api
+    hostname: template-api
+    networks:
+      - template
+    volumes:
+      - .:/app
+    ports:
+      - '3000:3000'
+
+volumes:
+  nestjs-template-mysql-data:
+    driver: local
+    external: false
+
+networks:
+  template:
+    driver: bridge
