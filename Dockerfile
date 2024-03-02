@@ -20,4 +20,4 @@ COPY --from=build /app/dist ./dist
 
 EXPOSE $PORT
 
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/server/main.js"]
