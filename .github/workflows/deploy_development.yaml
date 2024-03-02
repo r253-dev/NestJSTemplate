@@ -1,0 +1,29 @@
+on:
+  push:
+    branches: [develop]
+  release:
+    types:
+      - published
+
+jobs:
+  development:
+    name: deploy cloudrun to development environment
+    if: ${{ github.ref == 'refs/heads/develop' || github.base_ref == 'develop' }}
+    uses: ./.github/workflows/_deployment.yaml
+    permissions:
+      id-token: write
+      contents: read
+    with:
+      environment: development
+      ref: ${{ github.sha }}
+    secrets: inherit
+  production:
+    if: ${{ github.ref == 'refs/heads/production' || github.base_ref == 'production' }}
+    uses: ./.github/workflows/_deployment.yaml
+    permissions:
+      id-token: write
+      contents: read
+    with:
+      environment: production
+      ref: ${{ github.sha }}
+    secrets: inherit
