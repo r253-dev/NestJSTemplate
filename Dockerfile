@@ -18,5 +18,6 @@ FROM base as production
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 
-EXPOSE 3000
-CMD ["node", "dist/main.js"]
+EXPOSE $PORT
+
+CMD ["node", "dist/server/main.js"]
