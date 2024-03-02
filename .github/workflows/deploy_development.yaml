@@ -1,26 +1,29 @@
 on:
   push:
-    branches: [feature/deploy]
+    branches: [develop]
+  release:
+    types:
+      - published
 
 jobs:
-  dev:
-    name: deploy cloudrun to dev environment
-    if: ${{ github.ref == 'refs/heads/feature/deploy' || github.base_ref == 'feature/deploy' }}
+  development:
+    name: deploy cloudrun to development environment
+    if: ${{ github.ref == 'refs/heads/develop' || github.base_ref == 'develop' }}
     uses: ./.github/workflows/_deployment.yaml
     permissions:
       id-token: write
       contents: read
     with:
-      environment: dev
+      environment: development
       ref: ${{ github.sha }}
     secrets: inherit
-  prod:
-    if: ${{ github.ref == 'refs/heads/main' || github.base_ref == 'main' }}
+  production:
+    if: ${{ github.ref == 'production' || github.base_ref == 'production' }}
     uses: ./.github/workflows/_deployment.yaml
     permissions:
       id-token: write
       contents: read
     with:
-      environment: prod
+      environment: production
       ref: ${{ github.sha }}
     secrets: inherit
