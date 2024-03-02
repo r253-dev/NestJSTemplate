@@ -7,8 +7,7 @@ on:
 
 jobs:
   development:
-    name: deploy cloudrun to development environment
-    if: ${{ github.ref == 'refs/heads/develop' || github.base_ref == 'develop' }}
+    if: github.ref == 'refs/heads/develop'
     uses: ./.github/workflows/_deployment.yaml
     permissions:
       id-token: write
@@ -18,7 +17,7 @@ jobs:
       ref: ${{ github.sha }}
     secrets: inherit
   production:
-    if: ${{ github.ref == 'refs/heads/production' || github.base_ref == 'production' }}
+    if: github.event_name == 'release'
     uses: ./.github/workflows/_deployment.yaml
     permissions:
       id-token: write
