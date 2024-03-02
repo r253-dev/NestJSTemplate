@@ -40,8 +40,8 @@ jobs:
 
       - name: Build
         run: |
-          docker build -t ${{ FULL_IMAGE_NAME }} ./
+          docker build -t ${{ env.FULL_IMAGE_NAME }} ./
 
       - name: Push
         run: |
-          docker push ${{ FULL_IMAGE_NAME }}
+          docker push ${{ env.FULL_IMAGE_NAME }}
