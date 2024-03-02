@@ -50,4 +50,5 @@ jobs:
         run: |
           gcloud run deploy ${{ env.CLOUD_RUN_SERVICE }} \
             --image asia-northeast2-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.ARTIFACT_REPOSITORY }}/${{ env.IMAGE_NAME }} \
-            --region asia-northeast2
+            --region asia-northeast2 \
+            --port 3000
