@@ -18,7 +18,7 @@ jobs:
       ref: ${{ github.sha }}
     secrets: inherit
   production:
-    if: ${{ github.ref == 'production' || github.base_ref == 'production' }}
+    if: ${{ github.ref == 'refs/heads/production' || github.base_ref == 'production' }}
     uses: ./.github/workflows/_deployment.yaml
     permissions:
       id-token: write
