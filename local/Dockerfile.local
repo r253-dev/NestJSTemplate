@@ -1,5 +1,5 @@
 FROM node:20.11.1-bullseye
-RUN apt-get update && apt-get upgrade -y && apt-get install -y tini
+RUN apt-get update && apt-get install -y tini
   WORKDIR /app
 
 COPY --chown=node:node package*.json ./
