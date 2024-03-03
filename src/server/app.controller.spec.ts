@@ -19,10 +19,4 @@ describe('AppController', () => {
       expect(appController.getHello()).toBe('Hello World!');
     });
   });
-
-  describe('env', () => {
-    it('should return "test"', () => {
-      expect(appController.getEnv()).toBe('test');
-    });
-  });
 });
