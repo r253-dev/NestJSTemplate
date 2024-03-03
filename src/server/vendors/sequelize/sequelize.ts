@@ -1,12 +1,9 @@
 import { Sequelize } from 'sequelize';
 
+const socketPath = process.env.INSTANCE_CONNECTION_NAME;
 export const sequelize = new Sequelize(
-  process.env.DATABASE!,
-  process.env.DB_USER!,
-  process.env.DB_PASS!,
+  `mysql://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/${process.env.DATABASE}${socketPath ? `?socketPath=${socketPath}` : ''}`,
   {
-    host: process.env.INSTANCE_CONNECTION_NAME!,
-    dialect: 'mysql',
     logging: false,
   },
 );

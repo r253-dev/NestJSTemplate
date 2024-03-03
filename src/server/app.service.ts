@@ -11,6 +11,7 @@ export class AppService {
     await sequelize.query('SELECT 1');
     return {
       NODE_ENV: process.env.NODE_ENV,
+      DB: 'ok',
     };
   }
 }
