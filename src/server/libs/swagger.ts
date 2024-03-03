@@ -12,8 +12,6 @@ export function hostSwagger(app: INestApplication) {
       name: 'X-Requested-With',
       in: 'header',
       required: false,
-      // 本来はtrueにすべきだが、クライアント自動生成時に入力を強制されて面倒なのでfalseにしている。
-      // 現状はaxiosのデフォルト値を使っているため、リクエストごとに明示的に指定する必要が無い。
     })
     .addBearerAuth()
     .build();
