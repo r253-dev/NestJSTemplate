@@ -1,13 +1,13 @@
 on:
   push:
-    branches: [develop, feature/sequelize]
+    branches: [develop]
   release:
     types:
       - published
 
 jobs:
   development:
-    if: github.ref == 'refs/heads/feature/sequelize'
+    if: github.ref == 'refs/heads/develop'
     uses: ./.github/workflows/_deployment.yaml
     permissions:
       id-token: write
