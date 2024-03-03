@@ -11,15 +11,15 @@ services:
       - '3306:3306'
     environment:
       tz: UTC
-      MYSQL_DATABASE: 'nestjs_local'
-      MYSQL_USER: 'nestjs_local'
-      MYSQL_PASSWORD: 'nestjs_local'
+      MYSQL_DATABASE: 'nest_local'
+      MYSQL_USER: 'nest_local'
+      MYSQL_PASSWORD: 'nest_local'
       MYSQL_ROOT_PASSWORD: 'password'
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
     healthcheck:
       test: ['CMD-SHELL', "mysqladmin ping -ppassword | grep 'mysqld is alive'"]
-      timeout: 10s
-      retries: 10
+      timeout: 2s
+      retries: 20
 
   api:
     depends_on:

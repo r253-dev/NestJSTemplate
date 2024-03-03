@@ -23,8 +23,8 @@ export class AppController {
     summary: 'Environment Information',
     description: 'Environment Information',
   })
-  @ApiOkResponse({ type: String })
-  getEnv(): string {
-    return this.appService.getEnv();
+  @ApiOkResponse()
+  async getEnv() {
+    return await this.appService.getEnv();
   }
 }
