@@ -6,7 +6,10 @@ export class AppService {
     return 'Hello World!';
   }
 
-  getEnv(): string {
-    return process.env.NODE_ENV || 'undefined';
+  getEnv() {
+    return {
+      NODE_ENV: process.env.NODE_ENV,
+      INSTANCE_CONNECTION_NAME: process.env.INSTANCE_CONNECTION_NAME,
+    };
   }
 }
