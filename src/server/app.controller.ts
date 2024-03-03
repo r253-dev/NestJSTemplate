@@ -24,7 +24,7 @@ export class AppController {
     description: 'Environment Information',
   })
   @ApiOkResponse()
-  getEnv() {
-    return this.appService.getEnv();
+  async getEnv() {
+    return await this.appService.getEnv();
   }
 }
