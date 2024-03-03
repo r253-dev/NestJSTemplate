@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { sequelize } from 'vendors/sequelize/sequelize';
 
 @Injectable()
 export class AppService {
@@ -6,7 +7,11 @@ export class AppService {
     return 'Hello World!';
   }
 
-  getEnv(): string {
-    return process.env.NODE_ENV || 'undefined';
+  async getEnv() {
+    await sequelize.query('SELECT 1');
+    return {
+      NODE_ENV: process.env.NODE_ENV,
+      DB: 'ok',
+    };
   }
 }

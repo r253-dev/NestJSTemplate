@@ -1,6 +1,6 @@
 # base image
 FROM node:20.11.1-bullseye as base
-RUN apt-get update && apt-get install -y
+RUN apt-get update && apt-get install -y tini
 USER node
 WORKDIR /app
 
@@ -17,7 +17,8 @@ RUN npm ci --omit=dev
 FROM base as production
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
+COPY --from=build /app/entrypoint.sh ./
 
 EXPOSE $PORT
 
-CMD ["node", "dist/server/main.js"]
+ENTRYPOINT ["tini", "--", "./entrypoint.sh"]
