@@ -1,9 +1,7 @@
 import { Sequelize } from 'sequelize';
 
 const connectionName = process.env.INSTANCE_CONNECTION_NAME;
-const host = connectionName
-  ? `/cloudsql/${connectionName}`
-  : process.env.DB_HOST!;
+const host = connectionName ? `${connectionName}` : process.env.DB_HOST!;
 const user = process.env.DB_USER!;
 const database = process.env.DATABASE!;
 const pass = process.env.DB_PASS;
