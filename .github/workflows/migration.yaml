@@ -3,7 +3,7 @@ on:
     branches: [feature/sequelize-administrator]
 
 env:
-  GCP_PROJECT: r253-dev
+  GCP_PROJECT: 976519973151
 
 jobs:
   migration:
