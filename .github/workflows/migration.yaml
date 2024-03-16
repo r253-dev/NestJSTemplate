@@ -6,8 +6,8 @@ env:
   GCP_PROJECT: r253-dev
 
 jobs:
-  deploy:
-    name: deploy
+  migration:
+    name: migration
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,4 +24,4 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v2'
 
       - name: 'Get Secret'
-        run: gcloud secrets versions access latest --secret=SIKURETO
+        run: gcloud secrets versions access latest --secret=SEKURETO
