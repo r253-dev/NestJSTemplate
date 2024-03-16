@@ -11,6 +11,9 @@ $ npm ci
 ## Running the app
 
 ```bash
+# docker
+$ docker compose up -d --build
+
 # development
 $ npm run start
 
@@ -24,6 +27,9 @@ $ npm run start:prod
 ## Test
 
 ```bash
+# docker
+$ docker compose exec api npm run test
+
 # unit tests
 $ npm run test
 
@@ -32,6 +38,14 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
+```
+
+## Seed
+
+```bash
+# docker
+$ docker compose exec api npm run build
+$ docker compose exec api npm run db:seed
 ```
 
 ## Website

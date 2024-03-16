@@ -36,6 +36,8 @@ services:
       - .:/app
     ports:
       - '3000:3000'
+    environment:
+      DB_HOST: template-db
 
 volumes:
   nestjs-template-mysql-data:
