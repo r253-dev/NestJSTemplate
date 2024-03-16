@@ -17,6 +17,21 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.11.1
+          cache: npm
+
+      - name: Output versions
+        run: |
+          node -v
+          npm -v
+
+      - name: Install dependencies
+        if: ${{ steps.setup_node_id.outputs.cache-hit != 'true' }}
+        run: npm ci
+
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
