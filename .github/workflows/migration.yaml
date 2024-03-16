@@ -3,7 +3,7 @@ on:
     branches: [feature/sequelize-administrator]
 
 env:
-  GCP_PROJECT: 976519973151
+  GCP_PROJECT_NUMBER: 976519973151
 
 jobs:
   migration:
@@ -24,4 +24,4 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v2'
 
       - name: 'Get Secret'
-        run: gcloud secrets versions access latest --secret=SEKURETO --project ${{ env.GCP_PROJECT }}
+        run: gcloud secrets versions access latest --secret=SEKURETO --project ${{ env.GCP_PROJECT_NUMBER }}
