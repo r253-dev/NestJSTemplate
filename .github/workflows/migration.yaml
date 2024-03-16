@@ -23,15 +23,6 @@ jobs:
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v2'
 
-      - name: 'Display Environment Variables'
+      - name: Retrieve database configuration secrets
         run: |
-          echo "GCP_PROJECT_NUMBER: $GCP_PROJECT_NUMBER"
-          echo "GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS"
-          echo "CLOUDSDK_CORE_PROJECT: $CLOUDSDK_CORE_PROJECT"
-
-      - name: 'Get Secret with Debugging'
-        run: |
-          gcloud secrets versions access latest \
-            --secret=SEKURETO \
-            --project ${{ env.GCP_PROJECT_NUMBER }} \
-            --verbosity=debug
+          echo "DATABASE=$(gcloud secrets versions access latest --secret=SEKURETO --project=${{ env.GCP_PROJECT_NUMBER }})" >> $GITHUB_ENV
