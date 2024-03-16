@@ -27,15 +27,4 @@ export class AppController {
   async getEnv() {
     return await this.appService.getEnv();
   }
-
-  @Get('test')
-  @ApiOperation({
-    operationId: 'test',
-    summary: 'test',
-    description: 'test',
-  })
-  @ApiOkResponse({ type: String })
-  async test() {
-    return await this.appService.test();
-  }
 }

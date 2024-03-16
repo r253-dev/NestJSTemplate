@@ -2,8 +2,7 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AdministratorModel } from 'share/models/administrator.model';
-import { AdministratorRepository } from 'app.repository';
+import { AdminModule } from 'admin/admin.module';
 
 @Module({
   imports: [
@@ -15,9 +14,9 @@ import { AdministratorRepository } from 'app.repository';
       dialect: 'mysql',
       logQueryParameters: true,
     }),
-    SequelizeModule.forFeature([AdministratorModel]),
+    AdminModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AdministratorRepository],
+  providers: [AppService],
 })
 export class AppModule {}
