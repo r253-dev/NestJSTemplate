@@ -24,6 +24,4 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v2'
 
       - name: 'Get Secret'
-        run: gcloud secrets versions access latest --secret=SEKURETO
-        env:
-          GCP_PROJECT: ${{ env.GCP_PROJECT }}
+        run: gcloud secrets versions access latest --secret=SEKURETO --project ${{ env.GCP_PROJECT }}
