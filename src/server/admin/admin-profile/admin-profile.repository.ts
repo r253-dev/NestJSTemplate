@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { AdministratorModel } from 'share/models/administrator.model';
 
 @Injectable()
-export class AdministratorRepository {
+export class AdminProfileRepository {
   constructor(
     @InjectModel(AdministratorModel)
     private administratorModel: typeof AdministratorModel,

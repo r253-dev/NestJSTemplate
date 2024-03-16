@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { AdministratorRepository } from './admin-profile.repository';
+import { AdminProfileRepository } from './admin-profile.repository';
 
 @Injectable()
 export class AdminProfileService {
-  constructor(private repository: AdministratorRepository) {}
+  constructor(private repository: AdminProfileRepository) {}
 
   async test() {
     const count = await this.repository.count();
