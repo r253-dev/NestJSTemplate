@@ -33,7 +33,7 @@ AdministratorModel.init(
       unique: 'uniqueUuid',
     },
     email: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(512),
       allowNull: false,
       unique: 'uniqueEmail',
     },

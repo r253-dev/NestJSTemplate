@@ -12,11 +12,11 @@ export async function up(queryInterface: QueryInterface, _s: Sequelize) {
       },
       uuid: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
       },
       email: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(512),
       },
       password_hash: {
         allowNull: true,
