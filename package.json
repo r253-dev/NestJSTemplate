@@ -12,6 +12,7 @@
     "build:db:ts": "tsc -p tsconfig.db.json",
     "build:db:config": "cp src/db/config.js dist/db/config.js",
     "db:migrate": "sequelize-cli db:migrate",
+    "db:seed": "sequelize-cli db:seed:all",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start --entryFile server/main.js",
