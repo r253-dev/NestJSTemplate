@@ -20,15 +20,25 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
+      - name: Install Cloud SQL Proxy
+        run: |
+          wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
+          chmod +x cloud_sql_proxy
+          mkdir /tmp/cloudsql
+          ./cloud_sql_proxy -dir=/tmp/cloudsql -instances=${{ secrets.CLOUD_SQL_INSTANCE_ID }}=tcp:3306 &
+
       - name: Retrieve database configuration secrets
         run: |
           echo "DATABASE=$(gcloud secrets versions access latest --secret=database_development)" >> $GITHUB_ENV
-          echo "DB_HOST=$(gcloud secrets versions access latest --secret=db_host_development)" >> $GITHUB_ENV
+          echo "DB_HOST=127.0.0.1" >> $GITHUB_ENV # Use localhost for Cloud SQL Proxy
           echo "DB_USER=$(gcloud secrets versions access latest --secret=db_user_development)" >> $GITHUB_ENV
           echo "DB_PASS=$(gcloud secrets versions access latest --secret=db_pass_development)" >> $GITHUB_ENV
 
+      - name: Run build
+        run: npm run build:db
+
       - name: Run migration
-        run: npm run migration
+        run: npm run db:migration
         env:
           DATABASE: ${{ env.DATABASE }}
           DB_HOST: ${{ env.DB_HOST }}
