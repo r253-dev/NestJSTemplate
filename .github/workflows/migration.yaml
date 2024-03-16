@@ -25,3 +25,5 @@ jobs:
 
       - name: 'Get Secret'
         run: gcloud secrets versions access latest --secret=SEKURETO
+        env:
+          GCP_PROJECT: ${{ env.GCP_PROJECT }}
