@@ -11,6 +11,8 @@ export class AdministratorModel extends Model<
   InferAttributes<AdministratorModel>,
   InferCreationAttributes<AdministratorModel>
 > {
+  static tableName = 'administrators';
+
   declare id: CreationOptional<bigint>;
   declare uuid: string;
   declare email: string;
