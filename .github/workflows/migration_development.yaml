@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [develop]
+    branches: [fix/migration-socket]
 
 jobs:
   migration_development:
