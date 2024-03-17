@@ -40,7 +40,7 @@ jobs:
           wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
           chmod +x cloud_sql_proxy
           mkdir /tmp/cloudsql
-          ./cloud_sql_proxy -dir=/tmp/cloudsql -instances=${{ secrets.CLOUD_SQL_INSTANCE_ID }} &
+          ./cloud_sql_proxy -dir=/tmp/cloudsql -instances=${{ secrets.CLOUD_SQL_INSTANCE_ID }}=tcp:3306 &
 
       - name: Wait for Cloud SQL Proxy
         run: sleep 5
