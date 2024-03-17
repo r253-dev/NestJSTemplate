@@ -46,12 +46,6 @@ jobs:
         run: |
           docker push asia-northeast2-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.ARTIFACT_REPOSITORY }}/${{ env.IMAGE_NAME }}
 
-      - name: Deploy
-        run: |
-          gcloud run deploy ${{ env.CLOUD_RUN_SERVICE }} \
-            --image asia-northeast2-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.ARTIFACT_REPOSITORY }}/${{ env.IMAGE_NAME }} \
-            --region asia-northeast2
-
       - name: Build and Push Migration Image
         run: |
           docker build -t asia-northeast2-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.ARTIFACT_REPOSITORY }}/migrate-${{ env.IMAGE_NAME }} --target build ./
@@ -59,6 +53,13 @@ jobs:
 
       - name: Migrate
         run: |
-          gcloud run jobs update migrate-job \
+          gcloud run jobs update migrate-${{ env.IMAGE_NAME }} \
             --image asia-northeast2-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.ARTIFACT_REPOSITORY }}/migrate-${{ env.IMAGE_NAME }} \
+            --region asia-northeast2 \
             --execute-now
+
+      - name: Deploy
+        run: |
+          gcloud run deploy ${{ env.CLOUD_RUN_SERVICE }} \
+            --image asia-northeast2-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.ARTIFACT_REPOSITORY }}/${{ env.IMAGE_NAME }} \
+            --region asia-northeast2
