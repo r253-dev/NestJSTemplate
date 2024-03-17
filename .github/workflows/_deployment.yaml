@@ -59,7 +59,7 @@ jobs:
 
       - name: Migrate
         run: |
-          gcloud run jobs update migrate-job \
+          gcloud run jobs update migrate-${{ env.IMAGE_NAME }} \
             --image asia-northeast2-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.ARTIFACT_REPOSITORY }}/migrate-${{ env.IMAGE_NAME }} \
             --region asia-northeast2 \
             --execute-now
