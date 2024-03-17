@@ -16,6 +16,7 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+          create_credentials_file: true
 
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -39,7 +40,7 @@ jobs:
           wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
           chmod +x cloud_sql_proxy
           mkdir /tmp/cloudsql
-          ./cloud_sql_proxy -dir=/tmp/cloudsql -instances=${{ secrets.CLOUD_SQL_INSTANCE_ID }} -credential_file=${{ secrets.GCP_CREDENTIALS }} &
+          ./cloud_sql_proxy -dir=/tmp/cloudsql -instances=${{ secrets.CLOUD_SQL_INSTANCE_ID }} &
 
       - name: Wait for Cloud SQL Proxy
         run: sleep 5
