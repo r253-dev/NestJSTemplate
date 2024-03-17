@@ -51,4 +51,4 @@ jobs:
       - name: Run migration
         run: npm run db:migrate
         env:
-          RDB_MIGRATION_URL: mysql://nest_development:nest_development@localhost/nest_development
+          RDB_MIGRATION_URL: mysql://nest_development:nest_development@localhost:3306/nest_development
