@@ -50,9 +50,4 @@ jobs:
       - name: Run migration
         run: npm run db:migrate
         env:
-          DATABASE: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASS: ${{ secrets.DB_PASS }}
-          DB_HOST: localhost
-          # RDB_MIGRATION_URL の設定を更新して、Cloud SQL Proxy 経由で接続するように修正
-          RDB_MIGRATION_URL: 'mysql://${{ secrets.DB_USER }}:${{ secrets.DB_PASS }}@${{ env.DB_HOST }}/${{ secrets.DATABASE }}'
+          RDB_MIGRATION_URL: 'mysql://nest_development:nest_development@localhost/nest_development'
