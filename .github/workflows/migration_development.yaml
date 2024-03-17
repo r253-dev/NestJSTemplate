@@ -55,7 +55,5 @@ jobs:
       - name: Run migration
         run: npm run db:migrate
         env:
-          DATABASE: ${{ env.DATABASE }}
-          DB_HOST: ${{ env.DB_HOST }}
-          DB_USER: ${{ env.DB_USER }}
-          DB_PASS: ${{ env.DB_PASS }}
+          CONNECTION_URL: 'mysql://nest_development:nest_development@localhost/nest_development'
+          RDB_MIGRATION_URL: ${CONNECTION_URL//\/cloudsql/\/tmp\/cloudsql}
