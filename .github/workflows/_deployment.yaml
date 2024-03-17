@@ -59,7 +59,7 @@ jobs:
 
       - name: Migrate
         run: |
-          gcloud run jobs create migrate-job \
+          gcloud run jobs update migrate-job \
             --image asia-northeast2-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.ARTIFACT_REPOSITORY }}/migrate-${{ env.IMAGE_NAME }} \
             --region asia-northeast2 \
             --set-cloudsql-instances r253-dev:asia-northeast2:nest \
