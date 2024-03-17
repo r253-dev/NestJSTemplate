@@ -52,10 +52,16 @@ jobs:
             --image asia-northeast2-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.ARTIFACT_REPOSITORY }}/${{ env.IMAGE_NAME }} \
             --region asia-northeast2
 
+      - name: Build and Push Migration Image
+        run: |
+          docker build -t asia-northeast2-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.ARTIFACT_REPOSITORY }}/migrate-${{ env.IMAGE_NAME }} --target build ./
+          docker push asia-northeast2-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.ARTIFACT_REPOSITORY }}/migrate-${{ env.IMAGE_NAME }}
+
       - name: Migrate
         run: |
           gcloud run jobs create migrate-job \
-            --image asia-northeast2-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.ARTIFACT_REPOSITORY }}/${{ env.IMAGE_NAME }} \
+            --image asia-northeast2-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.ARTIFACT_REPOSITORY }}/migrate-${{ env.IMAGE_NAME }} \
             --region asia-northeast2 \
+            --set-cloudsql-instances r253-dev:asia-northeast2:nest \
             --command "npm run db:migrate" \
             --execute-now
