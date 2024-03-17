@@ -11,11 +11,14 @@ RUN npm ci
 
 COPY --chown=node:node . .
 RUN npm run build
+
+# production packages
+FROM build as production-packages
 RUN npm ci --omit=dev
 
 # production image
 FROM base as production
-COPY --from=build /app/node_modules ./node_modules
+COPY --from=production-packages /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/entrypoint.sh ./
 
