@@ -1,0 +1,11 @@
+{
+  "local": {
+    "use_env_variable": "RDB_MIGRATION_URL"
+  },
+  "development": {
+    "use_env_variable": "RDB_MIGRATION_URL"
+  },
+  "production": {
+    "use_env_variable": "RDB_MIGRATION_URL"
+  }
+}
