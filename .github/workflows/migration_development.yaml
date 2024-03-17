@@ -37,10 +37,10 @@ jobs:
 
       - name: Install Cloud SQL Proxy
         run: |
-          wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
-          chmod +x cloud_sql_proxy
+          curl -o cloud-sql-proxy https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.6.1/cloud-sql-proxy.linux.amd64
+          chmod +x cloud-sql-proxy
           mkdir /tmp/cloudsql
-          ./cloud_sql_proxy -dir=/tmp/cloudsql -instances=${{ secrets.CLOUD_SQL_INSTANCE_ID }}=tcp:3306 &
+          ./cloud-sql-proxy --address 127.0.0.1 --port 3306  ${{ secrets.CLOUD_SQL_INSTANCE_ID }} &
 
       - name: Wait for Cloud SQL Proxy
         run: sleep 5
@@ -51,4 +51,4 @@ jobs:
       - name: Run migration
         run: npm run db:migrate
         env:
-          RDB_MIGRATION_URL: mysql://nest_development:nest_development@localhost:3306/nest_development
+          RDB_MIGRATION_URL: mysql://nest_development:nest_development@127.0.0.1:3306/nest_development
