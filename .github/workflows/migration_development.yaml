@@ -20,7 +20,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.11.1
+          node-version: '20.11.1'
           cache: npm
 
       - name: Output versions
@@ -29,7 +29,6 @@ jobs:
           npm -v
 
       - name: Install dependencies
-        if: ${{ steps.setup_node_id.outputs.cache-hit != 'true' }}
         run: npm ci
 
       - name: Set up Cloud SDK
@@ -42,12 +41,8 @@ jobs:
           mkdir /tmp/cloudsql
           ./cloud_sql_proxy -dir=/tmp/cloudsql -instances=${{ secrets.CLOUD_SQL_INSTANCE_ID }}=tcp:3306 &
 
-      - name: Retrieve database configuration secrets
-        run: |
-          echo "DATABASE=$(gcloud secrets versions access latest --secret=database_development)" >> $GITHUB_ENV
-          echo "DB_HOST=127.0.0.1" >> $GITHUB_ENV # Use localhost for Cloud SQL Proxy
-          echo "DB_USER=$(gcloud secrets versions access latest --secret=db_user_development)" >> $GITHUB_ENV
-          echo "DB_PASS=$(gcloud secrets versions access latest --secret=db_pass_development)" >> $GITHUB_ENV
+      - name: Wait for Cloud SQL Proxy
+        run: sleep 5
 
       - name: Run build
         run: npm run build:db
@@ -55,5 +50,9 @@ jobs:
       - name: Run migration
         run: npm run db:migrate
         env:
-          CONNECTION_URL: 'mysql://nest_development:nest_development@localhost/nest_development'
-          RDB_MIGRATION_URL: ${CONNECTION_URL//\/cloudsql/\/tmp\/cloudsql}
+          DATABASE: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_HOST: localhost
+          # RDB_MIGRATION_URL の設定を更新して、Cloud SQL Proxy 経由で接続するように修正
+          RDB_MIGRATION_URL: 'mysql://${{ secrets.DB_USER }}:${{ secrets.DB_PASS }}@${{ env.DB_HOST }}/${{ secrets.DATABASE }}'
