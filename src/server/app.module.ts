@@ -8,12 +8,8 @@ import { Dialect } from 'sequelize';
 @Module({
   imports: [
     SequelizeModule.forRoot({
-      database: process.env.DATABASE,
-      host: process.env.DB_HOST,
-      username: process.env.DB_USER,
-      password: process.env.DB_PASS,
-      dialect: (process.env.DB_DIALECT || 'mysql') as Dialect,
       logQueryParameters: true,
+      ...getDatabaseConfig(),
     }),
     AdminModule,
   ],
@@ -21,3 +17,18 @@ import { Dialect } from 'sequelize';
   providers: [AppService],
 })
 export class AppModule {}
+
+function getDatabaseConfig() {
+  if (process.env.DB_URI) {
+    return {
+      uri: process.env.DB_URI,
+    };
+  }
+  return {
+    database: process.env.DATABASE,
+    host: process.env.DB_HOST,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    dialect: (process.env.DB_DIALECT || 'mysql') as Dialect,
+  };
+}

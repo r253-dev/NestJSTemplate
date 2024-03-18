@@ -67,7 +67,7 @@ export function Swagger(swagger: {
       case 403:
         decorators.push(
           ApiForbiddenResponse({
-            description: response.description && 'リクエストが許可されていない',
+            description: response.description || 'リクエストが許可されていない',
           }),
         );
         break;
@@ -75,7 +75,7 @@ export function Swagger(swagger: {
       case 409:
         decorators.push(
           ApiConflictResponse({
-            description: response.description && 'リクエストが競合している',
+            description: response.description || 'リクエストが競合している',
           }),
         );
         break;

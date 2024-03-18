@@ -4,6 +4,7 @@
   "moduleDirectories": ["node_modules", "src/server", "test"],
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
+  "globalSetup": "<rootDir>/test/server/setup.ts",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },
@@ -11,7 +12,9 @@
     "src/server/**/*.(t|j)s",
     "!**/*.module.ts",
     "!**/*.spec.ts",
-    "!**/main.ts"
+    "!**/main.ts",
+    "!**/db/migrations/*.ts",
+    "!server/libs/swagger.ts"
   ],
   "coverageDirectory": "../coverage"
 }
