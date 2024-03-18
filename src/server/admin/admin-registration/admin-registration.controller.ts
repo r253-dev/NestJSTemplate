@@ -27,14 +27,6 @@ export class AdminRegistrationController {
         type: AdministratorRegistrationResponseDto,
       },
       { status: HttpStatus.BAD_REQUEST },
-      {
-        status: HttpStatus.FORBIDDEN,
-        description: '許可されていないメールアドレス（ドメイン）で登録しようとした',
-      },
-      {
-        status: HttpStatus.CONFLICT,
-        description: '指定のメールアドレスが既に登録されている',
-      },
     ],
   })
   async register(
