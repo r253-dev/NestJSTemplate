@@ -4,6 +4,7 @@ import { AdministratorModel } from 'share/models/administrator.model';
 import { AdminRegistrationService } from './admin-registration.service';
 import { AdminRegistrationUsecase } from './admin-registration.usecase';
 import { AdminRegistrationRepository } from './admin-registration.repository';
+import { EMailModule } from 'email/email.module';
 
 class AdminRegistrationRepositoryMock {
   async findByEmail(email: string) {
@@ -35,6 +36,7 @@ describe('AdministratorsService', () => {
           useClass: AdminRegistrationRepositoryMock,
         },
       ],
+      imports: [EMailModule],
     }).compile();
 
     service = module.get(AdminRegistrationService);
