@@ -6,7 +6,7 @@ import { AdminRegistrationRepository } from './admin-registration.repository';
 export class AdminRegistrationUsecase {
   constructor(private repository: AdminRegistrationRepository) {}
 
-  async register(createAdministratorDto: { email: string }): Promise<void> {
+  async register(createAdministratorDto: { email: string }): Promise<null | AdministratorEntity> {
     if (!this.allowedEmail(createAdministratorDto.email)) {
       throw new ForbiddenException('許可されていないメールアドレスです');
     }
@@ -15,12 +15,12 @@ export class AdminRegistrationUsecase {
 
     // 既に存在しているならエラーすら出さずに終わる
     if (administrator !== null) {
-      return;
+      return null;
     }
 
     const newAdministrator = AdministratorEntity.factory(createAdministratorDto.email);
     await this.repository.save(newAdministrator);
-    // TODO: ここでメール送信
+    return newAdministrator;
   }
 
   private allowedEmail(email: string): boolean {
