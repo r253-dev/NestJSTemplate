@@ -5,7 +5,7 @@ import {
   InferCreationAttributes,
   Model,
 } from 'sequelize';
-import { sequelize } from 'vendors/sequelize/sequelize';
+import { sequelize } from '../../vendors/sequelize/sequelize';
 
 export class AdministratorModel extends Model<
   InferAttributes<AdministratorModel>,
