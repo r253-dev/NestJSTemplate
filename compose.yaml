@@ -39,6 +39,16 @@ services:
     environment:
       DB_HOST: template-db
 
+  mailcatcher:
+    image: schickling/mailcatcher
+    container_name: mailcatcher
+    hostname: mailcatcher
+    ports:
+      - '1080:1080'
+      - '1025:1025'
+    networks:
+      - template
+
 volumes:
   nestjs-template-mysql-data:
     driver: local

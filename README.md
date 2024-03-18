@@ -51,5 +51,6 @@ $ docker compose exec api npm run db:seed
 ## Website
 
 - API Document: [http://localhost:3000/swagger](http://localhost:3000/swagger)
+- mailcatcher: [http://localhost:1080](http://localhost:1080)
 - develop branch: [https://dev.nest.r253.dev](https://dev.nest.r253.dev)
 - production branch: [https://nest.r253.dev](https://nest.r253.dev)
