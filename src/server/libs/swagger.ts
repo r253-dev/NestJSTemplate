@@ -1,4 +1,5 @@
 import { INestApplication } from '@nestjs/common';
+import { patchNestJsSwagger } from 'nestjs-zod';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as fs from 'fs';
 import { dump } from 'js-yaml';
@@ -15,6 +16,7 @@ export function hostSwagger(app: INestApplication) {
     })
     .addBearerAuth()
     .build();
+  patchNestJsSwagger();
   const document = SwaggerModule.createDocument(app, config);
   fs.writeFileSync('./dist/swagger-spec.yaml', dump(document));
   SwaggerModule.setup('swagger', app, document);
