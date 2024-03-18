@@ -27,7 +27,6 @@ export class AdminRegistrationController {
         type: AdministratorRegistrationResponseDto,
       },
       { status: HttpStatus.BAD_REQUEST },
-      { status: HttpStatus.UNAUTHORIZED },
       {
         status: HttpStatus.FORBIDDEN,
         description: '許可されていないメールアドレス（ドメイン）で登録しようとした',
