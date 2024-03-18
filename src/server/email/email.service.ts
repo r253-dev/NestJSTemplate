@@ -5,10 +5,14 @@ import { MailerService } from '@nestjs-modules/mailer';
 export class EMailService {
   constructor(private readonly mailerService: MailerService) {}
 
-  private shouldSkip() {
+  private shouldSkip(): boolean {
     if (process.env.MAIL_HOST === undefined) {
       return true;
     }
+    if (process.env.MAIL_HOST === '') {
+      return true;
+    }
+    return false;
   }
 
   async sendAdminRegistration(email: string, context: { url: string }) {
