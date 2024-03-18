@@ -36,10 +36,10 @@ export class AdminRegistrationUsecase {
   }
 
   private async findByEmail(email: string): Promise<AdministratorEntity | null> {
-    const model = await this.repository.findByEmail(email);
-    if (model === null) {
+    const administrator = await this.repository.findByEmail(email);
+    if (administrator === null) {
       return null;
     }
-    return AdministratorEntity.fromModel(model);
+    return administrator;
   }
 }

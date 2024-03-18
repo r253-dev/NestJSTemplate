@@ -11,4 +11,18 @@ export class AdministratorEntity extends AdministratorEntityCore {
       createdAt: model.createdAt,
     });
   }
+
+  isAbleToLogin(): boolean {
+    if (this.properties.passwordHash === null) {
+      return false;
+    }
+    return true;
+  }
+
+  get passwordHash(): string {
+    if (this.properties.passwordHash === null) {
+      throw new Error('無効な管理者です');
+    }
+    return this.properties.passwordHash;
+  }
 }

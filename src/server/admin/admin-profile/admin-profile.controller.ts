@@ -3,7 +3,7 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { AdminProfileService } from './admin-profile.service';
 
-@Controller('test')
+@Controller('admin/~')
 @ApiTags('administrator')
 export class AdminProfileController {
   constructor(private readonly service: AdminProfileService) {}
