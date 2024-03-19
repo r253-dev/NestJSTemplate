@@ -1,12 +1,12 @@
 import { createZodDto } from 'nestjs-zod';
-import { administratorSchema } from 'share/dto/administrator.dto';
 import { z } from 'zod';
+import { administratorSchema } from 'share/dto/administrator.dto';
 
-const authSchema = administratorSchema.pick({
+export const adminAuthSchema = administratorSchema.pick({
   email: true,
   password: true,
 });
-export class AdminAuthDto extends createZodDto(authSchema) {}
+export class AdminAuthDto extends createZodDto(adminAuthSchema) {}
 
 const responseSchema = z.object({
   token: z.string(),

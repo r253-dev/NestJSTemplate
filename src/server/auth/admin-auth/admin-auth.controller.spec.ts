@@ -1,11 +1,27 @@
 import * as request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
+import { UnauthorizedException } from '@nestjs/common';
+import { PassportModule, PassportStrategy } from '@nestjs/passport';
+import { Strategy } from 'passport-local';
 import { AdminAuthController } from './admin-auth.controller';
 import { AdminAuthService } from './admin-auth.service';
+import { AdminLocalStrategy } from './admin-local.strategy';
 
 class ServiceMock {
-  async login(): Promise<{ token: string }> {
+  async issueToken(): Promise<{ token: string }> {
     return { token: 'dummy' };
+  }
+}
+
+class LocalStrategyMock extends PassportStrategy(Strategy) {
+  constructor() {
+    super({ usernameField: 'email' });
+  }
+  async validate(email: string, password: string) {
+    if (email === 'test@example.com' && password === 'password') {
+      return { uuid: '690f5dc4-449f-4499-b471-a57768ee7b8d' };
+    }
+    throw new UnauthorizedException();
   }
 }
 
@@ -16,10 +32,15 @@ beforeAll(async () => {
     controllers: [AdminAuthController],
     providers: [
       {
+        provide: AdminLocalStrategy,
+        useClass: LocalStrategyMock,
+      },
+      {
         provide: AdminAuthService,
         useClass: ServiceMock,
       },
     ],
+    imports: [PassportModule],
   }).compile();
   const app = module.createNestApplication();
   await app.init();

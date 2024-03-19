@@ -38,4 +38,12 @@ export class AdministratorEntityCore extends Entity<Properties> {
   get uuid(): string {
     return this.properties.uuid;
   }
+
+  get email(): string {
+    return this.properties.email;
+  }
+
+  get createdAt(): Date {
+    return this.properties.createdAt;
+  }
 }

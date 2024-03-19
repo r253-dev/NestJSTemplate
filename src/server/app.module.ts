@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { Dialect } from 'sequelize';
+import { AdminModule } from 'admin/admin.module';
+import { AdminJwtAuthGuard } from 'auth/admin-auth/admin-jwt-auth.guard';
+import { AdminAuthModule } from 'auth/admin-auth/admin-auth.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AdminModule } from 'admin/admin.module';
-import { Dialect } from 'sequelize';
-import { AdminAuthModule } from 'auth/admin-auth/admin-auth.module';
-import { AdminAuthGuard } from 'auth/admin-auth/admin-auth.guard';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { AdminAuthGuard } from 'auth/admin-auth/admin-auth.guard';
     AdminAuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AdminAuthGuard],
+  providers: [AppService, AdminJwtAuthGuard],
 })
 export class AppModule {}
 
