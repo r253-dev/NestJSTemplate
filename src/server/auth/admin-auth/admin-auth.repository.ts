@@ -2,10 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { AdministratorEntity } from './entities/administrator.entity';
 import { AdministratorModel } from 'share/models/administrator.model';
-import { save } from 'share/repository';
 
 @Injectable()
-export class AdminRegistrationRepository {
+export class AdminAuthRepository {
   constructor(
     @InjectModel(AdministratorModel)
     private administratorModel: typeof AdministratorModel,
@@ -21,9 +20,5 @@ export class AdminRegistrationRepository {
       return null;
     }
     return AdministratorEntity.fromModel(model);
-  }
-
-  async save(entity: AdministratorEntity): Promise<void> {
-    await save(entity);
   }
 }

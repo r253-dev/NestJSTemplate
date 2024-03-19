@@ -4,6 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AdminModule } from 'admin/admin.module';
 import { Dialect } from 'sequelize';
+import { AdminAuthModule } from 'auth/admin-auth/admin-auth.module';
+import { AdminAuthGuard } from 'auth/admin-auth/admin-auth.guard';
 
 @Module({
   imports: [
@@ -12,9 +14,10 @@ import { Dialect } from 'sequelize';
       ...getDatabaseConfig(),
     }),
     AdminModule,
+    AdminAuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AdminAuthGuard],
 })
 export class AppModule {}
 
