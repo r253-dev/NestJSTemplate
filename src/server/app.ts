@@ -1,14 +1,18 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { INestApplication } from '@nestjs/common';
 
 import { AppModule } from './app.module';
 import { AdminJwtAuthGuard } from 'auth/admin-auth/admin-jwt-auth.guard';
+import { AllExceptionsFilter } from 'share/filters/exception.filter';
 
 export async function createApp(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule, {
     ...getLoggerConfig(),
   });
   app.setGlobalPrefix('/v1');
+
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
   const adminAuthGuard = app.get(AdminJwtAuthGuard);
   app.useGlobalGuards(adminAuthGuard);

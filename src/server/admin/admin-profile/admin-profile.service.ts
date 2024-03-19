@@ -7,11 +7,11 @@ export class AdminProfileService {
     return `success`;
   }
 
-  getProfile(user: AdministratorEntityCore) {
+  getProfile(admin: AdministratorEntityCore) {
     return {
-      uuid: user.uuid,
-      email: user.email,
-      createdAt: user.createdAt,
+      uuid: admin.uuid,
+      email: admin.email,
+      createdAt: admin.createdAt,
     };
   }
 }
