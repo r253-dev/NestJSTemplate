@@ -1,6 +1,7 @@
 import { v4 } from 'uuid';
 import { AdministratorModel } from 'share/models/administrator.model';
 import { Entity, PropertiesCore } from 'share/entity';
+import { Role } from 'share/enums/role.enum';
 
 interface PropertiesEssential {
   email: string;
@@ -45,5 +46,10 @@ export class AdministratorEntityCore extends Entity<Properties> {
 
   get createdAt(): Date {
     return this.properties.createdAt;
+  }
+
+  get roles(): Role[] {
+    // FIXME: DBから取得する
+    return [Role.ADMIN];
   }
 }
