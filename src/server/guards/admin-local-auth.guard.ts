@@ -1,6 +1,6 @@
 import { BadRequestException, ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { adminAuthSchema } from './dto/auth.dto';
+import { adminAuthSchema } from './dto/admin-auth.dto';
 
 @Injectable()
 export class AdminLocalAuthGuard extends AuthGuard('local') {

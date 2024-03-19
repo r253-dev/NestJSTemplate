@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import helmet from 'helmet';
 
 import { AppModule } from './app.module';
-import { AdminJwtAuthGuard } from 'auth/admin-auth/admin-jwt-auth.guard';
+import { AdminJwtAuthGuard } from 'guards/admin-jwt-auth.guard';
 import { AllExceptionsFilter } from 'share/filters/exception.filter';
 
 export async function createApp(): Promise<INestApplication> {

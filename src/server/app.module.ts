@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Dialect } from 'sequelize';
 import { AdminModule } from 'admin/admin.module';
-import { AdminJwtAuthGuard } from 'auth/admin-auth/admin-jwt-auth.guard';
 import { AdminAuthModule } from 'auth/admin-auth/admin-auth.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AdminJwtAuthGuard } from 'guards/admin-jwt-auth.guard';
 
 @Module({
   imports: [

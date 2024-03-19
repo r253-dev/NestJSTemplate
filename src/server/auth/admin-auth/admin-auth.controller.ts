@@ -5,8 +5,8 @@ import { Swagger } from 'share/decorators/swagger';
 import { Admin } from 'share/decorators/admin';
 import { AdminAuthResponseDto } from './dto/auth.dto';
 import { AdminAuthService } from './admin-auth.service';
-import { AdminLocalAuthGuard } from './admin-local-auth.guard';
 import { AdministratorEntity } from './entities/administrator.entity';
+import { AdminLocalAuthGuard } from 'guards/admin-local-auth.guard';
 
 @Controller('auth/admin')
 @ApiTags('auth')
