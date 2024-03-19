@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { AdminJwtAuthGuard } from 'guards/admin-jwt-auth.guard';
 import { AllExceptionsFilter } from 'share/filters/exception.filter';
+import { RolesGuard } from 'guards/roles.guard';
 
 export async function createApp(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule, {
@@ -18,7 +19,8 @@ export async function createApp(): Promise<INestApplication> {
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
   const adminAuthGuard = app.get(AdminJwtAuthGuard);
-  app.useGlobalGuards(adminAuthGuard);
+  const rolesGuard = app.get(RolesGuard);
+  app.useGlobalGuards(adminAuthGuard, rolesGuard);
 
   app.enableCors({
     origin: [process.env.SERVICE_SITE_URL!],

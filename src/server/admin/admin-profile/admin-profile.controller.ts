@@ -6,6 +6,8 @@ import { AdministratorEntityCore } from 'share/entities/administrator.core.entit
 
 import { AdminProfileResponseDto } from './dto/admin-profile.dto';
 import { AdminProfileService } from './admin-profile.service';
+import { Roles } from 'share/decorators/roles.decorator';
+import { Role } from 'share/enums/role.enum';
 
 @Controller('admin/~')
 @ApiTags('administrator')
@@ -30,6 +32,7 @@ export class AdminProfileController {
     description: '管理者のプロフィールを取得する',
     responses: [{ status: 200, type: AdminProfileResponseDto }],
   })
+  @Roles(Role.ADMIN)
   getProfile(@Admin() admin: AdministratorEntityCore): AdminProfileResponseDto {
     return this.service.getProfile(admin);
   }
