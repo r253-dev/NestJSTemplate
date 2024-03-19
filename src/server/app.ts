@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { INestApplication } from '@nestjs/common';
 
 import { AppModule } from './app.module';
-import { AdminAuthGuard } from 'auth/admin-auth/admin-auth.guard';
+import { AdminJwtAuthGuard } from 'auth/admin-auth/admin-jwt-auth.guard';
 
 export async function createApp(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule, {
@@ -10,7 +10,7 @@ export async function createApp(): Promise<INestApplication> {
   });
   app.setGlobalPrefix('/v1');
 
-  const adminAuthGuard = app.get(AdminAuthGuard);
+  const adminAuthGuard = app.get(AdminJwtAuthGuard);
   app.useGlobalGuards(adminAuthGuard);
 
   app.enableCors({

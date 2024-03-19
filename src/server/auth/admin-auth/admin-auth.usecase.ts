@@ -1,9 +1,8 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import express from 'express';
+import { JwtService } from '@nestjs/jwt';
+import { BcryptService } from 'vendors/bcrypt/bcrypt.service';
 import { AdministratorEntity } from './entities/administrator.entity';
 import { AdminAuthRepository } from './admin-auth.repository';
-import { BcryptService } from 'vendors/bcrypt/bcrypt.service';
-import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AdminAuthUsecase {
@@ -14,18 +13,30 @@ export class AdminAuthUsecase {
   ) {}
 
   async validateAdministrator(email: string, password: string) {
-    const administrator = await this.findByEmail(email);
+    try {
+      const administrator = await this.findByEmail(email);
 
-    if (administrator.isAbleToLogin() === false) {
-      throw new UnauthorizedException();
+      if (administrator.isAbleToLogin() === false) {
+        throw new Error();
+      }
+
+      await this.verifyPassword(administrator.passwordHash, password);
+      return administrator;
+    } catch (e) {
+      throw new UnauthorizedException('メールアドレスまたはパスワードが間違っています');
     }
-
-    await this.verifyPassword(administrator.passwordHash, password);
-    return administrator;
   }
 
   private async findByEmail(email: string): Promise<AdministratorEntity> {
     const administrator = await this.repository.findByEmail(email);
+    if (administrator === null) {
+      throw new NotFoundException('Administrator not found');
+    }
+    return administrator;
+  }
+
+  async findByUuid(uuid: string): Promise<AdministratorEntity> {
+    const administrator = await this.repository.findByUuid(uuid);
     if (administrator === null) {
       throw new NotFoundException('Administrator not found');
     }
@@ -47,68 +58,5 @@ export class AdminAuthUsecase {
       type: 'administrator',
       sub: administrator.uuid,
     });
-  }
-
-  setTokenCookie(req: express.Request, token: string): void {
-    req.res!.cookie('adminToken', token, {
-      secure: true,
-      httpOnly: true,
-      sameSite: 'strict',
-    });
-  }
-
-  async getAuthorizedToken(req: express.Request) {
-    const token = this.extractTokenFromHeader(req);
-    if (!token) {
-      throw new UnauthorizedException();
-    }
-    const payload = await this.verifyToken(token);
-    return {
-      token,
-      payload,
-    };
-  }
-
-  async verifyToken(token: string): Promise<any> {
-    try {
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: process.env.JWT_SECRET,
-        algorithms: ['HS256'],
-      });
-
-      if (payload.type !== 'administrator') {
-        throw new UnauthorizedException(); // 管理者以外のトークン
-      }
-
-      return payload;
-    } catch (e) {
-      throw new UnauthorizedException();
-    }
-  }
-
-  private extractTokenFromHeader(request: express.Request): string | undefined {
-    // Bearerトークンがある場合、そちらを優先する
-    const authorization = request.headers.authorization;
-    if (authorization) {
-      const [type, token] = authorization.split(' ');
-      if (type === 'Bearer') {
-        return token;
-      }
-    }
-
-    // cookieのトークンを取得
-    const cookie = request.headers.cookie;
-    if (!cookie) {
-      return undefined;
-    }
-
-    const cookies = cookie.split(';');
-    const tokenCookie = cookies.find((cookie) => cookie.trim().startsWith('adminToken='));
-    if (!tokenCookie) {
-      return undefined;
-    }
-
-    const token = tokenCookie.split('=')[1];
-    return token;
   }
 }

@@ -139,7 +139,7 @@ describe('管理者の認証', () => {
 
 describe('認証が必要なエンドポイントへのアクセス', () => {
   test('認証されていないとアクセスできない', async () => {
-    const response = await request(server).get('/v1/admin/~/test');
+    const response = await request(server).get('/v1/admin/~');
 
     expect(response.status).toEqual(401);
     expect(response.body).toEqual({
@@ -151,10 +151,14 @@ describe('認証が必要なエンドポイントへのアクセス', () => {
   test('tokenが正しければアクセスできる', async () => {
     const token = await getAdminToken(server, 'test@example.com', 'password');
     const response = await request(server)
-      .get('/v1/admin/~/test')
-      .set('Authorization', `Bearer ${token}`);
+      .get('/v1/admin/~')
+      .set('Authorization', `bearer ${token}`);
 
     expect(response.status).toEqual(200);
-    expect(response.text).toEqual('success');
+    expect(response.body).toEqual({
+      uuid: '3b30345f-8890-4559-9af7-e243662296ca',
+      email: 'test@example.com',
+      createdAt: '2023-12-31T15:00:00.000Z',
+    });
   });
 });
