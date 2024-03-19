@@ -1,5 +1,6 @@
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { INestApplication } from '@nestjs/common';
+import helmet from 'helmet';
 
 import { AppModule } from './app.module';
 import { AdminJwtAuthGuard } from 'auth/admin-auth/admin-jwt-auth.guard';
@@ -9,6 +10,8 @@ export async function createApp(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule, {
     ...getLoggerConfig(),
   });
+  app.use(helmet());
+
   app.setGlobalPrefix('/v1');
 
   const { httpAdapter } = app.get(HttpAdapterHost);
