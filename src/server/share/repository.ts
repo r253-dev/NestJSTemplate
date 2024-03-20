@@ -7,3 +7,10 @@ export async function save<T extends PropertiesCore>(entity: Entity<T>): Promise
     entity._id = model.id;
   }
 }
+
+export function buildPaginationCondition(condition: { page: number; perPage: number }) {
+  return {
+    limit: condition.perPage,
+    offset: (condition.page - 1) * condition.perPage,
+  };
+}

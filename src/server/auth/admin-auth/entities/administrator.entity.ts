@@ -1,4 +1,4 @@
-import { AdministratorEntityCore } from 'share/entities/administrator.core.entity';
+import { AdministratorEntityCore, State } from 'share/entities/administrator.core.entity';
 import { AdministratorModel } from 'share/models/administrator.model';
 
 export class AdministratorEntity extends AdministratorEntityCore {
@@ -8,12 +8,16 @@ export class AdministratorEntity extends AdministratorEntityCore {
       uuid: model.uuid,
       email: model.email,
       passwordHash: model.passwordHash,
+      state: this.fromModel$State(model.state),
       createdAt: model.createdAt,
     });
   }
 
   isAbleToLogin(): boolean {
     if (this.properties.passwordHash === null) {
+      return false;
+    }
+    if ([State.INACTIVE, State.DISABLED, State.REMOVED].includes(this.properties.state)) {
       return false;
     }
     return true;
