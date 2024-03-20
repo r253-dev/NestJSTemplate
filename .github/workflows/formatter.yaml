@@ -1,10 +1,10 @@
 # https://help.github.com/en/articles/workflow-syntax-for-github-actions
 
 on: pull_request
-name: lint
+name: formatter
 jobs:
-  lint:
-    name: lint
+  formatter:
+    name: formatter
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -44,11 +44,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint
-        run: npm run lint:check
-
       - name: formatter
         run: npm run format:check
-
-      - name: build
-        run: npm run build

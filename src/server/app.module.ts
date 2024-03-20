@@ -4,7 +4,6 @@ import { Dialect } from 'sequelize';
 import { AdminModule } from 'admin/admin.module';
 import { AdminAuthModule } from 'auth/admin-auth/admin-auth.module';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AdminJwtAuthGuard } from 'guards/admin-jwt-auth.guard';
 import { RolesGuard } from 'guards/roles.guard';
 
@@ -18,7 +17,7 @@ import { RolesGuard } from 'guards/roles.guard';
     AdminAuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, RolesGuard, AdminJwtAuthGuard],
+  providers: [RolesGuard, AdminJwtAuthGuard],
 })
 export class AppModule {}
 

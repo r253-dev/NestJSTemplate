@@ -19,16 +19,6 @@ describe('AppController (e2e)', () => {
     const response = await request(server).get('/v1');
 
     expect(response.status).toEqual(200);
-    expect(response.text).toEqual('Hello World!');
-  });
-
-  test('/env (GET)', async () => {
-    const response = await request(server).get('/v1/env');
-
-    expect(response.status).toEqual(200);
-    expect(response.body).toEqual({
-      NODE_ENV: 'test',
-      DB: 'ok',
-    });
+    expect(response.body).toEqual({ message: 'Hello World' });
   });
 });
