@@ -8,20 +8,9 @@ import { AdminProfileResponseDto } from './dto/admin-profile.dto';
 import { AdminProfileService } from './admin-profile.service';
 
 @Controller('admin/~')
-@ApiTags('administrator')
+@ApiTags('administrator', '管理者のプロファイルモジュール')
 export class AdminProfileController {
   constructor(private readonly service: AdminProfileService) {}
-
-  @Get('test')
-  @Swagger({
-    operationId: 'test',
-    summary: 'test',
-    description: 'test',
-    responses: [{ status: 200, type: String }],
-  })
-  async test() {
-    return await this.service.test();
-  }
 
   @Get()
   @Swagger({

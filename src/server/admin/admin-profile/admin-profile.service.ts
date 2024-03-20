@@ -3,10 +3,6 @@ import { AdministratorEntityCore } from 'share/entities/administrator.core.entit
 
 @Injectable()
 export class AdminProfileService {
-  async test() {
-    return `success`;
-  }
-
   getProfile(admin: AdministratorEntityCore) {
     return {
       uuid: admin.uuid,
