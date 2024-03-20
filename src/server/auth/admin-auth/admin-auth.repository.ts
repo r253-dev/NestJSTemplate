@@ -12,6 +12,9 @@ export class AdminAuthRepository {
 
   async findByEmail(email: string): Promise<AdministratorEntity | null> {
     const model = await this.administratorModel.findOne({
+      attributes: {
+        include: ['passwordHash'],
+      },
       where: {
         email: email,
       },

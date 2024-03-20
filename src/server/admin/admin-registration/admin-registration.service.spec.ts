@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AdministratorModel } from 'share/models/administrator.model';
+import { AdministratorModel, State } from 'share/models/administrator.model';
 
 import { AdminRegistrationService } from './admin-registration.service';
 import { AdminRegistrationUsecase } from './admin-registration.usecase';
@@ -14,6 +14,7 @@ class AdminRegistrationRepositoryMock {
         uuid: '9c1b2f59-7273-4a44-b901-fbbd11884b71',
         email: 'test@example.com',
         passwordHash: '$2b$10$h16Y3k2LriL40/8TLjdyX.cXbSJm3FggySYpDvaUmTnaw8oGvgsZS',
+        state: State.ACTIVE,
         createdAt: new Date(),
       });
     }
