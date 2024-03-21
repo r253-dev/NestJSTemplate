@@ -79,7 +79,6 @@ export class AdminManageController {
       {
         status: HttpStatus.OK,
         type: AdminManageResponseDto,
-        isArray: true,
       },
     ],
   })
