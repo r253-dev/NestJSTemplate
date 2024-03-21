@@ -15,6 +15,10 @@ export function hostSwagger(app: INestApplication) {
       required: false,
     })
     .addBearerAuth()
+    // タグの順番指定のための定義
+    .addTag('auth', '認証')
+    .addTag('administrator', '管理者に関するエンドポイント')
+    .addTag('tenant', 'テナントに関するエンドポイント')
     .build();
   patchNestJsSwagger();
   const document = SwaggerModule.createDocument(app, config);
