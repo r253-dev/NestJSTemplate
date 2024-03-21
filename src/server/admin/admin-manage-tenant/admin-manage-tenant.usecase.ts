@@ -39,7 +39,10 @@ export class AdminManageTenantUsecase {
       await this.findByCode(code);
       return true;
     } catch (e) {
-      return false;
+      if (e instanceof NotFoundException) {
+        return false;
+      }
+      throw e;
     }
   }
 

@@ -11,7 +11,7 @@ export class AdminManageTenantService {
 
   async create(code: string): Promise<AdminManageTenantResponseDto> {
     if (await this.usecase.existsByCode(code)) {
-      throw new ConflictException();
+      throw new ConflictException('指定されたコードは既に使用されています');
     }
     const tenant = await this.usecase.create(code);
     return this.toResponse(tenant);

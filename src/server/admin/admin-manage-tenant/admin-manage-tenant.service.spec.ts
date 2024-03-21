@@ -70,7 +70,9 @@ describe('AdministratorsService', () => {
     });
 
     test('同じテナントコードでは登録できない', async () => {
-      await expect(service.create('test')).rejects.toThrow('Conflict');
+      await expect(service.create('test')).rejects.toThrow(
+        '指定されたコードは既に使用されています',
+      );
     });
   });
 
