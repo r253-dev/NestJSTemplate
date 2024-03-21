@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { AdminManageTenantUsecase } from './admin-manage-tenant.usecase';
 import { TenantEntity } from './entities/tenant.entity';
 import { AdminManageTenantResponseDto } from './dto/admin-manage-tenant-response.dto';
@@ -10,9 +10,6 @@ export class AdminManageTenantService {
   constructor(private usecase: AdminManageTenantUsecase) {}
 
   async create(code: string): Promise<AdminManageTenantResponseDto> {
-    if (await this.usecase.existsByCode(code)) {
-      throw new ConflictException('指定されたコードは既に使用されています');
-    }
     const tenant = await this.usecase.create(code);
     return this.toResponse(tenant);
   }

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { TenantEntity } from './entities/tenant.entity';
 import { AdminManageTenantRepository, Condition } from './admin-manage-tenant.repository';
 import { PaginationDto } from 'share/dto/pagination.dto';
@@ -8,6 +8,10 @@ export class AdminManageTenantUsecase {
   constructor(private repository: AdminManageTenantRepository) {}
 
   async create(code: string): Promise<TenantEntity> {
+    if (await this.existsByCode(code)) {
+      throw new ConflictException('指定されたコードは既に使用されています');
+    }
+
     const tenant = TenantEntity.factory(code);
     await this.repository.save(tenant);
     return tenant;
