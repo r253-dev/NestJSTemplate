@@ -2,19 +2,42 @@ import * as request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AdminManageTenantController } from './admin-manage-tenant.controller';
 import { AdminManageTenantService } from './admin-manage-tenant.service';
+import { TenantEntity } from './entities/tenant.entity';
+import { TenantModel, State as TenantModelState } from 'share/models/tenant.model';
+import { NotFoundException } from '@nestjs/common';
+
+const tenant = TenantEntity.fromModel(
+  new TenantModel({
+    id: BigInt(1),
+    code: 'tenant',
+    uuid: 'daad09eb-ef5a-4d1e-8613-0a2fc93752ca',
+    state: TenantModelState.ACTIVE,
+    createdAt: new Date('2024-03-01T00:00:00+09:00'),
+  }),
+);
 
 class ServiceMock {
-  async create() {}
-  async findAll(props: any) {
-    return props;
+  async create() {
+    return tenant;
   }
-  async findAllRemoved(props: any) {
-    return props;
+  async findAll() {
+    return [tenant];
+  }
+  async findAllRemoved() {
+    return [tenant];
   }
   async findByUuid(uuid: string) {
-    return uuid;
+    if (uuid === tenant.uuid) {
+      return tenant;
+    }
+    throw new NotFoundException();
   }
-  async remove() {}
+  async remove(uuid: string) {
+    if (uuid === tenant.uuid) {
+      return tenant;
+    }
+    throw new NotFoundException();
+  }
 }
 
 describe('AdminManageTenantController', () => {
@@ -38,7 +61,7 @@ describe('AdminManageTenantController', () => {
   describe('POST /admin/~/tenants', () => {
     test('codeが必要', async () => {
       const response = await request(server).post('/admin/~/tenants').send({
-        code: 'password',
+        code: 'tenant-code',
       });
       expect(response.status).toEqual(201);
     });
@@ -96,16 +119,35 @@ describe('AdminManageTenantController', () => {
 
   describe('GET /admin/~/tenants/:uuid', () => {
     test('UUIDがしっかりと受け取られている', async () => {
-      const response = await request(server).get('/admin/~/tenants/uuid-like-string');
-      expect(response.status).toEqual(200);
-      expect(response.text).toEqual('uuid-like-string');
+      // 存在するUUIDを指定したらリクエストが通り
+      {
+        const response = await request(server).get(`/admin/~/tenants/${tenant.uuid}`);
+        expect(response.status).toEqual(200);
+      }
+      // 存在しないUUIDを指定したらリクエストが弾かれる
+      {
+        const response = await request(server).get(
+          `/admin/~/tenants/4b811d63-9aef-462b-ae30-01e1ad547473`,
+        );
+        expect(response.status).toEqual(404);
+      }
     });
   });
 
   describe('DELETE /admin/~/tenants/:uuid', () => {
     test('UUIDがしっかりと受け取られている', async () => {
-      const response = await request(server).delete('/admin/~/tenants/uuid-like-string');
-      expect(response.status).toEqual(204);
+      // 存在するUUIDを指定したらリクエストが通り
+      {
+        const response = await request(server).delete(`/admin/~/tenants/${tenant.uuid}`);
+        expect(response.status).toEqual(204);
+      }
+      // 存在しないUUIDを指定したらリクエストが弾かれる
+      {
+        const response = await request(server).delete(
+          `/admin/~/tenants/4b811d63-9aef-462b-ae30-01e1ad547473`,
+        );
+        expect(response.status).toEqual(404);
+      }
     });
   });
 });

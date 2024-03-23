@@ -9,6 +9,7 @@ import { AdminManageTenantCreationDto } from './dto/admin-manage-tenant-create-d
 import { ApiPagination, Pagination } from 'share/decorators/pagination.decorator';
 import { PaginationDto } from 'share/dto/pagination.dto';
 import { AdminManageTenantResponseDto } from './dto/admin-manage-tenant-response.dto';
+import { TenantEntity } from './entities/tenant.entity';
 
 @Controller('admin/~/tenants')
 @ApiTags('tenant', '管理者によるテナント管理モジュール')
@@ -33,7 +34,8 @@ export class AdminManageTenantController {
   async create(
     @Body() creationDto: AdminManageTenantCreationDto,
   ): Promise<AdminManageTenantResponseDto> {
-    return await this.service.create(creationDto.code);
+    const tenant = await this.service.create(creationDto.code);
+    return this.toResponse(tenant);
   }
 
   @Get()
@@ -51,7 +53,8 @@ export class AdminManageTenantController {
     ],
   })
   async findAll(@Pagination() pagination: PaginationDto): Promise<AdminManageTenantResponseDto[]> {
-    return await this.service.findAll(pagination);
+    const tenants = await this.service.findAll(pagination);
+    return tenants.map(this.toResponse);
   }
 
   @Get('@removed')
@@ -71,7 +74,8 @@ export class AdminManageTenantController {
   async findAllRemoved(
     @Pagination() pagination: PaginationDto,
   ): Promise<AdminManageTenantResponseDto[]> {
-    return await this.service.findAllRemoved(pagination);
+    const tenants = await this.service.findAllRemoved(pagination);
+    return tenants.map(this.toResponse);
   }
 
   @Get('count')
@@ -119,7 +123,8 @@ export class AdminManageTenantController {
     ],
   })
   async findByUuid(@Param('uuid') uuid: string): Promise<AdminManageTenantResponseDto> {
-    return await this.service.findByUuid(uuid);
+    const tenant = await this.service.findByUuid(uuid);
+    return this.toResponse(tenant);
   }
 
   @Delete(':uuid')
@@ -131,5 +136,12 @@ export class AdminManageTenantController {
   })
   async remove(@Param('uuid') uuid: string): Promise<void> {
     await this.service.remove(uuid);
+  }
+
+  private toResponse(tenant: TenantEntity): AdminManageTenantResponseDto {
+    return {
+      uuid: tenant.uuid,
+      code: tenant.code,
+    };
   }
 }

@@ -44,6 +44,16 @@ export class TenantEntityCore extends Entity<Properties> {
     }
   }
 
+  static fromModel(model: TenantModel): TenantEntityCore {
+    return new TenantEntityCore({
+      id: model.id,
+      uuid: model.uuid,
+      code: model.code,
+      state: this.fromModel$State(model.state),
+      createdAt: model.createdAt,
+    });
+  }
+
   static fromModel$State(state: ModelState): State {
     switch (state) {
       case ModelState.INACTIVE:

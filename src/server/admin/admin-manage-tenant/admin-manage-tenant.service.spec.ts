@@ -6,16 +6,17 @@ import { AdminManageTenantRepository } from './admin-manage-tenant.repository';
 import { BcryptModule } from 'vendors/bcrypt/bcrypt.module';
 import mockDate from '@libs/date';
 import { TenantEntity } from './entities/tenant.entity';
-import { State, TenantModel } from 'share/models/tenant.model';
+import { TenantModel, State as TenantModelState } from 'share/models/tenant.model';
 
-const tenantModel = new TenantModel({
-  id: BigInt(1),
-  uuid: 'b323b661-fbf9-4309-b5ce-6b6210019b95',
-  code: 'test',
-  state: State.ACTIVE,
-  createdAt: new Date('2024-03-01T00:00:00+09:00'),
-});
-const tenant = TenantEntity.fromModel(tenantModel);
+const tenant = TenantEntity.fromModel(
+  new TenantModel({
+    id: BigInt(1),
+    code: 'tenant',
+    uuid: 'daad09eb-ef5a-4d1e-8613-0a2fc93752ca',
+    state: TenantModelState.ACTIVE,
+    createdAt: new Date('2024-03-01T00:00:00+09:00'),
+  }),
+);
 
 class AdminManageTenantRepositoryMock {
   async findByCode(code: string) {
@@ -62,15 +63,14 @@ describe('AdministratorsService', () => {
     test('テナントが作成され、UUIDが付与される', async () => {
       await mockDate('2024-03-01T12:34:56.789Z', async () => {
         const result = await service.create('new-tenant');
-        expect(result).toEqual({
-          uuid: expect.any(String),
-          code: 'new-tenant',
-        });
+        expect(result).toBeInstanceOf(TenantEntity);
+        expect(result.uuid).toEqual(expect.any(String));
+        expect(result.code).toEqual('new-tenant');
       });
     });
 
     test('同じテナントコードでは登録できない', async () => {
-      await expect(service.create('test')).rejects.toThrow(
+      await expect(service.create('tenant')).rejects.toThrow(
         '指定されたコードは既に使用されています',
       );
     });
@@ -79,7 +79,7 @@ describe('AdministratorsService', () => {
   describe('テナントの削除', () => {
     // とりあえず正常終了することが確認できれば良しとする（削除されたかどうかはe2eで確認する）
     test('テナントを削除する', async () => {
-      await expect(service.remove('b323b661-fbf9-4309-b5ce-6b6210019b95')).resolves.not.toThrow();
+      await expect(service.remove('daad09eb-ef5a-4d1e-8613-0a2fc93752ca')).resolves.not.toThrow();
     });
     test('存在しないUUIDを指定したらエラー', async () => {
       await expect(service.remove('not-found-uuid')).rejects.toThrow('Not Found');
@@ -90,14 +90,9 @@ describe('AdministratorsService', () => {
     test('テナント一覧を取得する', async () => {
       const result = await service.findAll({ page: 1, perPage: 10 });
       expect(result).toHaveLength(10);
-      expect(result[0]).toEqual({
-        uuid: 'b323b661-fbf9-4309-b5ce-6b6210019b95',
-        code: 'test',
-      });
-      expect(result[1]).toEqual({
-        uuid: 'b323b661-fbf9-4309-b5ce-6b6210019b95',
-        code: 'test',
-      });
+      expect(result[0]).toBeInstanceOf(TenantEntity);
+      expect(result[0].uuid).toEqual('daad09eb-ef5a-4d1e-8613-0a2fc93752ca');
+      expect(result[0].code).toEqual('tenant');
     });
   });
 
@@ -105,20 +100,18 @@ describe('AdministratorsService', () => {
     test('削除されたテナント一覧を取得する', async () => {
       const result = await service.findAllRemoved({ page: 1, perPage: 10 });
       expect(result).toHaveLength(10);
-      expect(result[0]).toEqual({
-        uuid: 'b323b661-fbf9-4309-b5ce-6b6210019b95',
-        code: 'test',
-      });
+      expect(result[0]).toBeInstanceOf(TenantEntity);
+      expect(result[0].uuid).toEqual('daad09eb-ef5a-4d1e-8613-0a2fc93752ca');
+      expect(result[0].code).toEqual('tenant');
     });
   });
 
   describe('UUIDからテナントの取得', () => {
     test('存在するUUIDであれば取得できる', async () => {
-      const result = await service.findByUuid('b323b661-fbf9-4309-b5ce-6b6210019b95');
-      expect(result).toEqual({
-        uuid: 'b323b661-fbf9-4309-b5ce-6b6210019b95',
-        code: 'test',
-      });
+      const result = await service.findByUuid('daad09eb-ef5a-4d1e-8613-0a2fc93752ca');
+      expect(result).toBeInstanceOf(TenantEntity);
+      expect(result.uuid).toEqual('daad09eb-ef5a-4d1e-8613-0a2fc93752ca');
+      expect(result.code).toEqual('tenant');
     });
 
     test('存在しないUUIDであればNot Found', async () => {
