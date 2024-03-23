@@ -13,8 +13,8 @@ module.exports = async () => {
       require(join(__dirname, '../../src/server/share/models', file));
     });
 
-  await sequelize.sync({ force: true });
   try {
+    await sequelize.sync({ force: true });
     await initializeAdministrator();
     await initializeTenant();
   } catch (e) {
