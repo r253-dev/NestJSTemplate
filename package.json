@@ -26,7 +26,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "dotenv -c test jest -- --config ./jest-e2e.json",
-    "verify": "run-p build format:check lint:check test test:e2e"
+    "test:all": "run-s test test:e2e",
+    "verify": "run-p build format:check lint:check test:all"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.11.2",
