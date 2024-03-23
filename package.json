@@ -25,7 +25,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "pretest:e2e": "rm test/test.sqlite",
+    "pretest:e2e": "rm -f test/test.sqlite",
     "test:e2e": "dotenv -c test jest -- --config ./jest-e2e.json",
     "verify": "run-p build format:check lint:check test test:e2e"
   },
