@@ -204,8 +204,9 @@ describe('認証が必要なエンドポイントへのアクセス', () => {
     });
   });
 
+  let token = '';
   test('tokenが正しければアクセスできる', async () => {
-    const token = await getAdminToken(server, 'test@example.com', 'password');
+    token = await getAdminToken(server, 'test@example.com', 'password');
     const response = await request(server)
       .get('/v1/admin/~')
       .set('Authorization', `bearer ${token}`);
@@ -215,6 +216,18 @@ describe('認証が必要なエンドポイントへのアクセス', () => {
       uuid: '3b30345f-8890-4559-9af7-e243662296ca',
       email: 'test@example.com',
       createdAt: '2023-12-31T15:00:00.000Z',
+    });
+  });
+
+  test('ユーザー認証には通らない', async () => {
+    const response = await request(server)
+      .get('/v1/users/~')
+      .set('Authorization', `bearer ${token}`);
+
+    expect(response.status).toEqual(403);
+    expect(response.body).toEqual({
+      statusCode: 403,
+      message: 'Forbidden',
     });
   });
 });

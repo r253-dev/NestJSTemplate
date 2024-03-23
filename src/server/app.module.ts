@@ -6,6 +6,9 @@ import { AdminAuthModule } from 'auth/admin-auth/admin-auth.module';
 import { AppController } from './app.controller';
 import { AdminJwtAuthGuard } from 'guards/admin-jwt-auth.guard';
 import { RolesGuard } from 'guards/roles.guard';
+import { UserAuthModule } from 'auth/user-auth/user-auth.module';
+import { UserJwtAuthGuard } from 'guards/user-jwt-auth.guard';
+import { UserModule } from 'users/user.module';
 
 @Module({
   imports: [
@@ -15,9 +18,11 @@ import { RolesGuard } from 'guards/roles.guard';
     }),
     AdminModule,
     AdminAuthModule,
+    UserModule,
+    UserAuthModule,
   ],
   controllers: [AppController],
-  providers: [RolesGuard, AdminJwtAuthGuard],
+  providers: [RolesGuard, AdminJwtAuthGuard, UserJwtAuthGuard],
 })
 export class AppModule {}
 

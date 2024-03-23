@@ -13,7 +13,7 @@ class ServiceMock {
   }
 }
 
-class LocalStrategyMock extends PassportStrategy(Strategy) {
+class LocalStrategyMock extends PassportStrategy(Strategy, 'admin-local') {
   constructor() {
     super({ usernameField: 'email' });
   }
