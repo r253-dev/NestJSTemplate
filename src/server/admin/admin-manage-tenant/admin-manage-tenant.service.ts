@@ -1,17 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { AdminManageTenantUsecase } from './admin-manage-tenant.usecase';
-import { TenantEntity } from './entities/tenant.entity';
-import { AdminManageTenantResponseDto } from './dto/admin-manage-tenant-response.dto';
 import { PaginationDto } from 'share/dto/pagination.dto';
 import { State } from 'share/entities/tenant.core.entity';
+import { TenantEntity } from './entities/tenant.entity';
+import { AdminManageTenantUsecase } from './admin-manage-tenant.usecase';
 
 @Injectable()
 export class AdminManageTenantService {
   constructor(private usecase: AdminManageTenantUsecase) {}
 
-  async create(code: string): Promise<AdminManageTenantResponseDto> {
+  async create(code: string): Promise<TenantEntity> {
     const tenant = await this.usecase.create(code);
-    return this.toResponse(tenant);
+    return tenant;
   }
 
   async remove(uuid: string): Promise<void> {
@@ -19,14 +18,14 @@ export class AdminManageTenantService {
     await this.usecase.remove(tenant);
   }
 
-  async findAll(pagination: PaginationDto): Promise<AdminManageTenantResponseDto[]> {
+  async findAll(pagination: PaginationDto): Promise<TenantEntity[]> {
     const tenants = await this.usecase.findAll(pagination);
-    return tenants.map(this.toResponse);
+    return tenants;
   }
 
-  async findAllRemoved(pagination: PaginationDto): Promise<AdminManageTenantResponseDto[]> {
+  async findAllRemoved(pagination: PaginationDto): Promise<TenantEntity[]> {
     const tenants = await this.usecase.findAll(pagination, { states: [State.REMOVED] });
-    return tenants.map(this.toResponse);
+    return tenants;
   }
 
   async count(): Promise<number> {
@@ -37,15 +36,8 @@ export class AdminManageTenantService {
     return await this.usecase.count({ states: [State.REMOVED] });
   }
 
-  async findByUuid(uuid: string): Promise<AdminManageTenantResponseDto> {
+  async findByUuid(uuid: string): Promise<TenantEntity> {
     const tenant = await this.usecase.findByUuid(uuid);
-    return this.toResponse(tenant);
-  }
-
-  private toResponse(tenant: TenantEntity): AdminManageTenantResponseDto {
-    return {
-      uuid: tenant.uuid,
-      code: tenant.code,
-    };
+    return tenant;
   }
 }

@@ -14,13 +14,8 @@ export class TenantEntity extends TenantEntityCore {
   }
 
   static fromModel(model: TenantModel): TenantEntity {
-    return new TenantEntity({
-      id: model.id,
-      uuid: model.uuid,
-      code: model.code,
-      state: this.fromModel$State(model.state),
-      createdAt: model.createdAt,
-    });
+    const tenant = super.fromModel(model);
+    return new TenantEntity(tenant.properties);
   }
 
   remove(): void {
