@@ -27,6 +27,10 @@ export class AdminManageUsecase {
     return await this.repository.findAll(pagination, condition);
   }
 
+  async count(condition?: Condition): Promise<number> {
+    return await this.repository.count(condition);
+  }
+
   async findByUuid(uuid: string): Promise<AdministratorEntity> {
     const administrator = await this.repository.findByUuid(uuid);
     if (administrator === null) {

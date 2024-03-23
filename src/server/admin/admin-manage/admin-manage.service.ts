@@ -27,9 +27,17 @@ export class AdminManageService {
     return administrators.map(this.toResponse);
   }
 
+  async count(): Promise<number> {
+    return await this.usecase.count();
+  }
+
   async findAllRemoved(pagination: PaginationDto): Promise<AdminManageResponseDto[]> {
     const administrators = await this.usecase.findAll(pagination, { states: [State.REMOVED] });
     return administrators.map(this.toResponse);
+  }
+
+  async countRemoved(): Promise<number> {
+    return await this.usecase.count({ states: [State.REMOVED] });
   }
 
   async findByUuid(uuid: string): Promise<AdminManageResponseDto> {

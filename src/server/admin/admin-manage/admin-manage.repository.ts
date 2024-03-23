@@ -38,6 +38,12 @@ export class AdminManageRepository {
     return models.map((model) => AdministratorEntity.fromModel(model));
   }
 
+  async count(condition?: Condition): Promise<number> {
+    return await this.administratorModel.count({
+      where: this.buildCondition(condition),
+    });
+  }
+
   async findByUuid(uuid: string): Promise<AdministratorEntity | null> {
     const model = await this.administratorModel.findOne({
       where: {

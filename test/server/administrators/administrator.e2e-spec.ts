@@ -235,7 +235,7 @@ describe('認証が必要なエンドポイントへのアクセス', () => {
 describe('管理者の管理', () => {
   let token = '';
 
-  test('管理者の取得（削除された管理者は取得できない）', async () => {
+  test('管理者一覧の取得（削除された管理者は取得できない）', async () => {
     token = await getAdminToken(server, 'test@example.com', 'password');
     const response = await request(server)
       .get('/v1/admin/~/administrators')
@@ -267,13 +267,22 @@ describe('管理者の管理', () => {
       const response = await request(server)
         .get('/v1/admin/~/administrators')
         .query({
-          perPage: 5,
+          perPage: 4,
         })
         .set('Authorization', `bearer ${token}`);
 
       expect(response.status).toEqual(200);
-      expect(response.body.length).toEqual(5);
+      expect(response.body.length).toEqual(4);
     }
+  });
+
+  test('管理者数の取得', async () => {
+    const response = await request(server)
+      .get('/v1/admin/~/administrators/count')
+      .set('Authorization', `bearer ${token}`);
+
+    expect(response.status).toEqual(200);
+    expect(response.text).toEqual('5');
   });
 
   test('管理者の取得', async () => {
@@ -295,6 +304,15 @@ describe('管理者の管理', () => {
       statusCode: 404,
       message: 'Not Found',
     });
+  });
+
+  test('削除された管理者数の取得', async () => {
+    const response = await request(server)
+      .get('/v1/admin/~/administrators/@removed/count')
+      .set('Authorization', `bearer ${token}`);
+
+    expect(response.status).toEqual(200);
+    expect(response.text).toEqual('1');
   });
 
   test('管理者の作成', async () => {
@@ -382,5 +400,14 @@ describe('管理者の管理', () => {
         createdAt: expect.any(String),
       },
     ]);
+  });
+
+  test('削除された管理者数の取得', async () => {
+    const response = await request(server)
+      .get('/v1/admin/~/administrators/@removed/count')
+      .set('Authorization', `bearer ${token}`);
+
+    expect(response.status).toEqual(200);
+    expect(response.text).toEqual('2');
   });
 });
