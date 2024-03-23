@@ -52,6 +52,22 @@ export class AdminManageController {
     return await this.service.findAll(pagination);
   }
 
+  @Get('count')
+  @Swagger({
+    operationId: 'countAdministrator',
+    summary: '管理者数を取得する',
+    description: '管理者数を取得する',
+    responses: [
+      {
+        status: HttpStatus.OK,
+        type: Number,
+      },
+    ],
+  })
+  async count(): Promise<number> {
+    return await this.service.count();
+  }
+
   @Get('@removed')
   @ApiPagination()
   @Swagger({
@@ -68,6 +84,22 @@ export class AdminManageController {
   })
   async findAllRemoved(@Pagination() pagination: PaginationDto): Promise<AdminManageResponseDto[]> {
     return await this.service.findAllRemoved(pagination);
+  }
+
+  @Get('@removed/count')
+  @Swagger({
+    operationId: 'countRemovedAdministrator',
+    summary: '削除された管理者数を取得する',
+    description: '削除された管理者数を取得する',
+    responses: [
+      {
+        status: HttpStatus.OK,
+        type: Number,
+      },
+    ],
+  })
+  async countRemoved(): Promise<number> {
+    return await this.service.countRemoved();
   }
 
   @Get(':uuid')
