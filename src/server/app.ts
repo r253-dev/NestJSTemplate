@@ -1,5 +1,5 @@
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, VersioningType } from '@nestjs/common';
 import helmet from 'helmet';
 
 import { AppModule } from './app.module';
@@ -13,8 +13,11 @@ export async function createApp(): Promise<INestApplication> {
     ...getLoggerConfig(),
   });
   app.use(helmet());
-
-  app.setGlobalPrefix('/v1');
+  app.enableVersioning({
+    type: VersioningType.URI,
+    prefix: 'v',
+    defaultVersion: '1',
+  });
 
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));

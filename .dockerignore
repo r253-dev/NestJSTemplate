@@ -7,3 +7,4 @@ Dockerfile
 node_modules/
 test/
 *.spec.ts
+dist/
