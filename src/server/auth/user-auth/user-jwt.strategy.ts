@@ -1,11 +1,11 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { AdminAuthUsecase } from './admin-auth.usecase';
+import { UserAuthUsecase } from './user-auth.usecase';
 
 @Injectable()
-export class AdminJwtStrategy extends PassportStrategy(Strategy, 'admin-jwt') {
-  constructor(private usecase: AdminAuthUsecase) {
+export class UserJwtStrategy extends PassportStrategy(Strategy, 'user-jwt') {
+  constructor(private usecase: UserAuthUsecase) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -14,10 +14,10 @@ export class AdminJwtStrategy extends PassportStrategy(Strategy, 'admin-jwt') {
   }
 
   async validate(payload: any) {
-    if (payload.type !== 'administrator') {
+    if (payload.type !== 'user') {
       throw new ForbiddenException();
     }
-    const administrator = await this.usecase.findByUuid(payload.sub);
-    return administrator;
+    const user = await this.usecase.findByUuid(payload.sub);
+    return user;
   }
 }
