@@ -10,5 +10,6 @@ import { TenantModel } from 'share/models/tenant.model';
   controllers: [AdminManageTenantController],
   providers: [AdminManageTenantService, AdminManageTenantUsecase, AdminManageTenantRepository],
   imports: [SequelizeModule.forFeature([TenantModel])],
+  exports: [AdminManageTenantService],
 })
 export class AdminManageTenantModule {}
