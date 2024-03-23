@@ -38,6 +38,22 @@ describe('管理者によるテナントの管理', () => {
       tenantId = response.body.uuid;
     });
 
+    test('テナントコードを重複させることは出来ない', async () => {
+      const response = await request(server)
+        .post('/v1/admin/~/tenants')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          code: 'tenant',
+        });
+
+      expect(response.status).toEqual(409);
+      expect(response.body).toEqual({
+        statusCode: 409,
+        error: 'Conflict',
+        message: '指定されたコードは既に使用されています',
+      });
+    });
+
     test('テナント一覧の取得（削除されたテナントは取得できない）', async () => {
       {
         const response = await request(server)
