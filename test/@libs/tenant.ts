@@ -19,6 +19,6 @@ export async function createTenant(server: any, token: string): Promise<Tenant> 
 
   return {
     uuid: response.body.uuid,
-    code: response.body.tenant,
+    code: response.body.code,
   };
 }

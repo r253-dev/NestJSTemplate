@@ -6,6 +6,7 @@ import { AppModule } from './app.module';
 import { AdminJwtAuthGuard } from 'guards/admin-jwt-auth.guard';
 import { AllExceptionsFilter } from 'share/filters/exception.filter';
 import { RolesGuard } from 'guards/roles.guard';
+import { UserJwtAuthGuard } from 'guards/user-jwt-auth.guard';
 
 export async function createApp(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule, {
@@ -19,8 +20,9 @@ export async function createApp(): Promise<INestApplication> {
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
   const adminAuthGuard = app.get(AdminJwtAuthGuard);
+  const userAuthGuard = app.get(UserJwtAuthGuard);
   const rolesGuard = app.get(RolesGuard);
-  app.useGlobalGuards(adminAuthGuard, rolesGuard);
+  app.useGlobalGuards(adminAuthGuard, userAuthGuard, rolesGuard);
 
   app.enableCors({
     origin: [process.env.SERVICE_SITE_URL!],

@@ -116,3 +116,8 @@ UserModel.init(
     },
   },
 );
+
+UserModel.belongsTo(TenantModel, {
+  foreignKey: 'tenantId',
+  targetKey: 'id',
+});

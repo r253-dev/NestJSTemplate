@@ -26,7 +26,9 @@ export interface UserEntityProperties extends PropertiesCore, PropertiesEssentia
   tenant?: TenantEntityCore;
 }
 
-export class UserEntityCore<T extends UserEntityProperties> extends Entity<T> {
+export class UserEntityCore<
+  T extends UserEntityProperties = UserEntityProperties,
+> extends Entity<T> {
   toModel(): UserModel {
     const model = new UserModel({
       id: this.properties.id,

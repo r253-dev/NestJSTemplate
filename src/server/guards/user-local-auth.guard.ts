@@ -1,14 +1,14 @@
 import { BadRequestException, ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { adminAuthSchema } from './dto/admin-auth.dto';
+import { userAuthSchema } from './dto/user-auth.dto';
 
 @Injectable()
-export class AdminLocalAuthGuard extends AuthGuard('admin-local') {
+export class UserLocalAuthGuard extends AuthGuard('user-local') {
   canActivate(context: ExecutionContext) {
     const body = context.getArgByIndex(0).body;
 
     try {
-      adminAuthSchema.parse(body);
+      userAuthSchema.parse(body);
     } catch (e) {
       throw new BadRequestException({
         errors: (e as any).errors,
