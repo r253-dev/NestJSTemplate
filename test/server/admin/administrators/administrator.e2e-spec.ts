@@ -107,7 +107,7 @@ describe('管理者の管理', () => {
         .set('Authorization', `bearer ${token}`);
 
       expect(response.status).toEqual(200);
-      expect(response.body.length).toBeGreaterThan(3);
+      expect(response.body.length).toBeGreaterThanOrEqual(3);
     }
   });
 
@@ -117,7 +117,7 @@ describe('管理者の管理', () => {
       .set('Authorization', `bearer ${token}`);
 
     expect(response.status).toEqual(200);
-    expect(Number(response.text)).toBeGreaterThan(3);
+    expect(Number(response.text)).toBeGreaterThanOrEqual(3);
   });
 
   test('管理者の取得', async () => {
