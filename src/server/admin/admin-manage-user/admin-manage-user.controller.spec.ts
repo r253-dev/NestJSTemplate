@@ -31,7 +31,7 @@ const user = UserEntity.fromModel(
   }),
 );
 
-class ServiceMock {
+class AdminManageUserServiceMock {
   async create() {
     return user;
   }
@@ -67,7 +67,7 @@ describe('AdminManageUserController', () => {
       providers: [
         {
           provide: AdminManageUserService,
-          useClass: ServiceMock,
+          useClass: AdminManageUserServiceMock,
         },
       ],
     }).compile();

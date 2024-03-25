@@ -15,13 +15,7 @@ export class AdministratorEntity extends AdministratorEntityCore {
   }
 
   static fromModel(model: AdministratorModel): AdministratorEntity {
-    return new AdministratorEntity({
-      id: model.id,
-      uuid: model.uuid,
-      email: model.email,
-      passwordHash: model.passwordHash,
-      state: this.fromModel$State(model.state),
-      createdAt: model.createdAt,
-    });
+    const base = super.fromModel(model);
+    return new AdministratorEntity(base.properties);
   }
 }

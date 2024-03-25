@@ -16,14 +16,11 @@ const tenant = TenantEntity.fromModel(
   }),
 );
 
-class ServiceMock {
+class AdminManageTenantServiceMock {
   async create() {
     return tenant;
   }
   async findAll() {
-    return [tenant];
-  }
-  async findAllRemoved() {
     return [tenant];
   }
   async findByUuid(uuid: string) {
@@ -34,7 +31,7 @@ class ServiceMock {
   }
   async remove(uuid: string) {
     if (uuid === tenant.uuid) {
-      return tenant;
+      return;
     }
     throw new NotFoundException();
   }
@@ -49,7 +46,7 @@ describe('AdminManageTenantController', () => {
       providers: [
         {
           provide: AdminManageTenantService,
-          useClass: ServiceMock,
+          useClass: AdminManageTenantServiceMock,
         },
       ],
     }).compile();
