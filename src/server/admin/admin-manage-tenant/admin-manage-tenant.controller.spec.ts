@@ -16,7 +16,7 @@ const tenant = TenantEntity.fromModel(
   }),
 );
 
-class ServiceMock {
+class AdminManageTenantServiceMock {
   async create() {
     return tenant;
   }
@@ -46,7 +46,7 @@ describe('AdminManageTenantController', () => {
       providers: [
         {
           provide: AdminManageTenantService,
-          useClass: ServiceMock,
+          useClass: AdminManageTenantServiceMock,
         },
       ],
     }).compile();

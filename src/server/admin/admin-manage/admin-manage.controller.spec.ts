@@ -16,7 +16,7 @@ const administratorModel = new AdministratorModel({
 });
 const administrator = AdministratorEntity.fromModel(administratorModel);
 
-class ServiceMock {
+class AdminManageServiceMock {
   async create() {
     return administrator;
   }
@@ -49,7 +49,7 @@ describe('AdminManageController', () => {
       providers: [
         {
           provide: AdminManageService,
-          useClass: ServiceMock,
+          useClass: AdminManageServiceMock,
         },
       ],
     }).compile();

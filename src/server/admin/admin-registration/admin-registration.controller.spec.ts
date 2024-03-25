@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AdminRegistrationController } from './admin-registration.controller';
 import { AdminRegistrationService } from './admin-registration.service';
 
-class ServiceMock {
+class AdminRegistrationServiceMock {
   async register(dto: { email: string }) {
     return dto.email;
   }
@@ -18,7 +18,7 @@ describe('AdminRegistrationController', () => {
       providers: [
         {
           provide: AdminRegistrationService,
-          useClass: ServiceMock,
+          useClass: AdminRegistrationServiceMock,
         },
       ],
     }).compile();

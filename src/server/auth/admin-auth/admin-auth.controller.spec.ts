@@ -7,7 +7,7 @@ import { AdminAuthController } from './admin-auth.controller';
 import { AdminAuthService } from './admin-auth.service';
 import { AdminLocalStrategy } from './admin-local.strategy';
 
-class ServiceMock {
+class AdminAuthServiceMock {
   async issueToken(): Promise<{ token: string }> {
     return { token: 'dummy' };
   }
@@ -37,7 +37,7 @@ beforeAll(async () => {
       },
       {
         provide: AdminAuthService,
-        useClass: ServiceMock,
+        useClass: AdminAuthServiceMock,
       },
     ],
     imports: [PassportModule],
