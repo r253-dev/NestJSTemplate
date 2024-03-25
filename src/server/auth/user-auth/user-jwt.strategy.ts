@@ -17,7 +17,7 @@ export class UserJwtStrategy extends PassportStrategy(Strategy, 'user-jwt') {
     if (payload.type !== 'user') {
       throw new ForbiddenException();
     }
-    const user = await this.usecase.findByUuid(payload.sub);
+    const user = await this.usecase.findByTenantUuidAndUuid(payload.tid, payload.sub);
     return user;
   }
 }

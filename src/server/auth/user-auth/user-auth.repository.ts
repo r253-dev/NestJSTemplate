@@ -35,11 +35,20 @@ export class UserAuthRepository {
     return UserEntity.fromModel(model);
   }
 
-  async findByUuid(uuid: string): Promise<UserEntity | null> {
+  async findByTenantUuidAndUuid(tenantUuid: string, uuid: string): Promise<UserEntity | null> {
     const model = await this.userModel.findOne({
       where: {
         uuid: uuid,
       },
+      include: [
+        {
+          model: TenantModel,
+          required: true,
+          where: {
+            uuid: tenantUuid,
+          },
+        },
+      ],
     });
     if (model === null) {
       return null;
