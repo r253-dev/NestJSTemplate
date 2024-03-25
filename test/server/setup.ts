@@ -3,6 +3,7 @@ import { join } from 'path';
 import { sequelize } from '../../src/server/vendors/sequelize/sequelize';
 import { State as AdministratorState } from 'share/models/administrator.model';
 import { State as TenantState } from 'share/models/tenant.model';
+import { prefectures } from '../@libs/constants';
 
 module.exports = async () => {
   readdirSync(join(__dirname, '../../src/server/share/models'))
@@ -17,6 +18,7 @@ module.exports = async () => {
     await sequelize.sync({ force: true });
     await initializeAdministrator();
     await initializeTenant();
+    await initializePrefecture();
   } catch (e) {
     console.log(e);
     throw e;
@@ -40,5 +42,15 @@ async function initializeTenant() {
     ,("b27353bb-d3f3-4dbf-a28a-aba3ecf56cd0", "removed" , ${TenantState.REMOVED},  "2024-01-01T00:00:00.000+09:00")
     ,("358ef591-a927-40c5-8078-27e76b159ba2", "inactive", ${TenantState.INACTIVE}, "2024-01-01T00:00:00.000+09:00")
     ,("9dd874ec-a7e1-4b4f-8227-9274bbfe5918", "disabled", ${TenantState.DISABLED}, "2024-01-01T00:00:00.000+09:00");
+  `);
+}
+
+async function initializePrefecture() {
+  await sequelize.query(`INSERT INTO prefectures (uuid, code, name, name_kana, created_at) VALUES
+  ${prefectures
+    .map((prefecture) => {
+      return `('${prefecture.uuid}', '${prefecture.code}', '${prefecture.name}', '${prefecture.nameKana}', '${prefecture.createdAt}')`;
+    })
+    .join(',')}
   `);
 }
