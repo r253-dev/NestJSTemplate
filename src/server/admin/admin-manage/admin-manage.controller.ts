@@ -9,6 +9,7 @@ import { AdminManageResponseDto } from './dto/admin-manage-response.dto';
 import { AdminManageCreationDto } from './dto/admin-manage-create-dto';
 import { ApiPagination, Pagination } from 'share/decorators/pagination.decorator';
 import { PaginationDto } from 'share/dto/pagination.dto';
+import { AdministratorEntity } from './entities/administrator.entity';
 
 @Controller('admin/~/administrators')
 @ApiTags('administrator', '管理者の管理モジュール')
@@ -31,7 +32,8 @@ export class AdminManageController {
     ],
   })
   async create(@Body() creationDto: AdminManageCreationDto): Promise<AdminManageResponseDto> {
-    return await this.service.create(creationDto.email, creationDto.password);
+    const administrator = await this.service.create(creationDto.email, creationDto.password);
+    return this.toResponse(administrator);
   }
 
   @Get()
@@ -49,7 +51,8 @@ export class AdminManageController {
     ],
   })
   async findAll(@Pagination() pagination: PaginationDto): Promise<AdminManageResponseDto[]> {
-    return await this.service.findAll(pagination);
+    const administrators = await this.service.findAll(pagination);
+    return administrators.map(this.toResponse);
   }
 
   @Get('count')
@@ -83,7 +86,8 @@ export class AdminManageController {
     ],
   })
   async findAllRemoved(@Pagination() pagination: PaginationDto): Promise<AdminManageResponseDto[]> {
-    return await this.service.findAllRemoved(pagination);
+    const administrators = await this.service.findAllRemoved(pagination);
+    return administrators.map(this.toResponse);
   }
 
   @Get('@removed/count')
@@ -115,7 +119,8 @@ export class AdminManageController {
     ],
   })
   async findByUuid(@Param('uuid') uuid: string): Promise<AdminManageResponseDto> {
-    return await this.service.findByUuid(uuid);
+    const administrator = await this.service.findByUuid(uuid);
+    return this.toResponse(administrator);
   }
 
   @Delete(':uuid')
@@ -131,5 +136,13 @@ export class AdminManageController {
   })
   async remove(@Param('uuid') uuid: string): Promise<void> {
     await this.service.remove(uuid);
+  }
+
+  private toResponse(administrator: AdministratorEntity): AdminManageResponseDto {
+    return {
+      uuid: administrator.uuid,
+      email: administrator.email,
+      createdAt: administrator.createdAt,
+    };
   }
 }

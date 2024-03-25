@@ -2,19 +2,42 @@ import * as request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AdminManageController } from './admin-manage.controller';
 import { AdminManageService } from './admin-manage.service';
+import { AdministratorEntity } from './entities/administrator.entity';
+import { AdministratorModel, State } from 'share/models/administrator.model';
+import { NotFoundException } from '@nestjs/common';
+
+const administratorModel = new AdministratorModel({
+  id: BigInt(1),
+  uuid: '9c1b2f59-7273-4a44-b901-fbbd11884b71',
+  email: 'test@example.com',
+  passwordHash: '$2b$10$h16Y3k2LriL40/8TLjdyX.cXbSJm3FggySYpDvaUmTnaw8oGvgsZS',
+  state: State.ACTIVE,
+  createdAt: new Date('2024-03-01T00:00:00+09:00'),
+});
+const administrator = AdministratorEntity.fromModel(administratorModel);
 
 class ServiceMock {
-  async create() {}
-  async findAll(props: any) {
-    return props;
+  async create() {
+    return administrator;
   }
-  async findAllRemoved(props: any) {
-    return props;
+  async findAll() {
+    return [administrator];
+  }
+  async findAllRemoved() {
+    return [administrator];
   }
   async findByUuid(uuid: string) {
-    return uuid;
+    if (uuid === administrator.uuid) {
+      return administrator;
+    }
+    throw new NotFoundException();
   }
-  async remove() {}
+  async remove(uuid: string) {
+    if (uuid === administrator.uuid) {
+      return;
+    }
+    throw new NotFoundException();
+  }
 }
 
 describe('AdminManageController', () => {
@@ -42,6 +65,11 @@ describe('AdminManageController', () => {
         password: 'password',
       });
       expect(response.status).toEqual(201);
+      expect(response.body).toEqual({
+        uuid: administrator.uuid,
+        email: administrator.email,
+        createdAt: administrator.createdAt.toISOString(),
+      });
     });
 
     test('email形式でなければNG', async () => {
@@ -114,78 +142,46 @@ describe('AdminManageController', () => {
   });
 
   describe('GET /admin/~/administrators', () => {
-    test('paginationが有効（デフォルト25件/1ページ）', async () => {
+    test('全件取得', async () => {
       const response = await request(server).get('/admin/~/administrators');
       expect(response.status).toEqual(200);
-      expect(response.body).toEqual({
-        perPage: 25,
-        page: 1,
+      expect(response.body).toHaveLength(1);
+      expect(response.body[0]).toEqual({
+        uuid: administrator.uuid,
+        email: administrator.email,
+        createdAt: administrator.createdAt.toISOString(),
       });
-    });
-  });
-
-  describe('GET /admin/~/administrators/@removed', () => {
-    test('paginationが有効', async () => {
-      const response = await request(server).get('/admin/~/administrators/@removed').query({
-        perPage: '50',
-        page: '2',
-      });
-      expect(response.status).toEqual(200);
-      expect(response.body).toEqual({
-        perPage: 50,
-        page: 2,
-      });
-    });
-
-    test('perPageは最大100', async () => {
-      {
-        const response = await request(server).get('/admin/~/administrators/@removed').query({
-          perPage: '100',
-          page: '1',
-        });
-        expect(response.status).toEqual(200);
-        expect(response.body).toEqual({
-          perPage: 100,
-          page: 1,
-        });
-      }
-      {
-        const response = await request(server).get('/admin/~/administrators/@removed').query({
-          perPage: '101',
-          page: '1',
-        });
-        expect(response.status).toEqual(400);
-        expect(response.body).toEqual({
-          statusCode: 400,
-          message: 'Validation failed',
-          errors: [
-            {
-              code: 'too_big',
-              message: 'Number must be less than or equal to 100',
-              path: ['perPage'],
-              type: 'number',
-              maximum: 100,
-              inclusive: true,
-              exact: false,
-            },
-          ],
-        });
-      }
     });
   });
 
   describe('GET /admin/~/administrators/:uuid', () => {
     test('UUIDがしっかりと受け取られている', async () => {
-      const response = await request(server).get('/admin/~/administrators/uuid-like-string');
+      const response = await request(server).get(`/admin/~/administrators/${administrator.uuid}`);
       expect(response.status).toEqual(200);
-      expect(response.text).toEqual('uuid-like-string');
+      expect(response.body).toEqual({
+        uuid: administrator.uuid,
+        email: administrator.email,
+        createdAt: administrator.createdAt.toISOString(),
+      });
     });
   });
 
   describe('DELETE /admin/~/administrators/:uuid', () => {
     test('UUIDがしっかりと受け取られている', async () => {
-      const response = await request(server).delete('/admin/~/administrators/uuid-like-string');
-      expect(response.status).toEqual(204);
+      // 存在するUUIDを指定したらリクエストが通り
+      {
+        const response = await request(server).delete(
+          `/admin/~/administrators/${administrator.uuid}`,
+        );
+        expect(response.status).toEqual(204);
+      }
+      // 存在しないUUIDを指定したらリクエストが弾かれる
+      {
+        const response = await request(server).delete(
+          `/admin/~/administrators/4b811d63-9aef-462b-ae30-01e1ad547473`,
+        );
+        expect(response.status).toEqual(404);
+      }
     });
   });
 });
