@@ -47,6 +47,17 @@ export class AdministratorEntityCore extends Entity<Properties> {
     }
   }
 
+  static fromModel(model: AdministratorModel): AdministratorEntityCore {
+    return new AdministratorEntityCore({
+      id: model.id,
+      uuid: model.uuid,
+      email: model.email,
+      passwordHash: model.passwordHash,
+      state: this.fromModel$State(model.state),
+      createdAt: model.createdAt,
+    });
+  }
+
   static fromModel$State(state: ModelState): State {
     switch (state) {
       case ModelState.INACTIVE:
