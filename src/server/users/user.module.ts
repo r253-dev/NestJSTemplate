@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { UserProfileModule } from './admin-profile/user-profile.module';
+import { UserProfileModule } from './user-profile/user-profile.module';
 
 const modules = [UserProfileModule];
 
