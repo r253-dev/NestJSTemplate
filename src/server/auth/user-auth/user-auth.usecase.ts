@@ -35,8 +35,8 @@ export class UserAuthUsecase {
     return user;
   }
 
-  async findByUuid(uuid: string): Promise<UserEntity> {
-    const user = await this.repository.findByUuid(uuid);
+  async findByTenantUuidAndUuid(tenantUuid: string, uuid: string): Promise<UserEntity> {
+    const user = await this.repository.findByTenantUuidAndUuid(tenantUuid, uuid);
     if (user === null) {
       throw new NotFoundException('User not found');
     }
@@ -57,6 +57,7 @@ export class UserAuthUsecase {
     return await this.jwtService.signAsync({
       type: 'user',
       sub: user.uuid,
+      tid: user.tenant!.uuid,
     });
   }
 }

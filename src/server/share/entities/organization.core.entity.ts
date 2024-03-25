@@ -1,43 +1,42 @@
 import { Entity, PropertiesCore } from 'share/entity';
-import { UserModel, State as ModelState } from 'share/models/user.model';
+import { OrganizationModel, State as ModelState } from 'share/models/organization.model';
 import { TenantEntityCore } from './tenant.core.entity';
 import { TenantModel } from 'share/models/tenant.model';
 
 export const enum State {
-  INACTIVE = 'inactive',
   ACTIVE = 'active',
   DISABLED = 'disabled',
   REMOVED = 'removed',
+  ARCHIVED = 'archived',
 }
 
 interface PropertiesEssential {
-  code: string;
-  email: string | null;
+  name: string;
+  nameKana: string;
 }
 
-export interface UserEntityProperties extends PropertiesCore, PropertiesEssential {
+export interface OrganizationEntityProperties extends PropertiesCore, PropertiesEssential {
   tenantId: bigint;
   uuid: string;
-  passwordHash: string | null;
+  code: string | null;
   state: State;
-  email: string | null;
   createdAt: Date;
 
   tenant?: TenantEntityCore;
 }
 
-export class UserEntityCore<
-  T extends UserEntityProperties = UserEntityProperties,
+export class OrganizationEntityCore<
+  T extends OrganizationEntityProperties = OrganizationEntityProperties,
 > extends Entity<T> {
-  toModel(): UserModel {
-    const model = new UserModel({
+  toModel(): OrganizationModel {
+    const model = new OrganizationModel({
       id: this.properties.id,
       tenantId: this.properties.tenantId,
       uuid: this.properties.uuid,
       code: this.properties.code,
-      passwordHash: this.properties.passwordHash,
-      state: UserEntityCore.toModel$state(this.properties.state),
-      email: this.properties.email,
+      name: this.properties.name,
+      nameKana: this.properties.nameKana,
+      state: OrganizationEntityCore.toModel$state(this.properties.state),
       createdAt: this.properties.createdAt,
     });
     model.isNewRecord = this.properties.id === undefined;
@@ -46,32 +45,32 @@ export class UserEntityCore<
 
   static toModel$state(state: State): ModelState {
     switch (state) {
-      case State.INACTIVE:
-        return ModelState.INACTIVE;
       case State.ACTIVE:
         return ModelState.ACTIVE;
       case State.DISABLED:
         return ModelState.DISABLED;
       case State.REMOVED:
         return ModelState.REMOVED;
+      case State.ARCHIVED:
+        return ModelState.ARCHIVED;
     }
   }
 
-  static fromModel(model: UserModel): UserEntityCore<UserEntityProperties> {
+  static fromModel(model: OrganizationModel): OrganizationEntityCore<OrganizationEntityProperties> {
     const fromModel$tenant = (tenant?: TenantModel): TenantEntityCore | undefined => {
       if (tenant === undefined) {
         return undefined;
       }
       return TenantEntityCore.fromModel(tenant);
     };
-    return new UserEntityCore({
+    return new OrganizationEntityCore({
       id: model.id,
       tenantId: model.tenantId,
       uuid: model.uuid,
       code: model.code,
-      passwordHash: model.passwordHash,
+      name: model.name,
+      nameKana: model.nameKana,
       state: this.fromModel$State(model.state),
-      email: model.email,
       createdAt: model.createdAt,
 
       tenant: fromModel$tenant(model.tenant),
@@ -80,14 +79,14 @@ export class UserEntityCore<
 
   static fromModel$State(state: ModelState): State {
     switch (state) {
-      case ModelState.INACTIVE:
-        return State.INACTIVE;
       case ModelState.ACTIVE:
         return State.ACTIVE;
       case ModelState.DISABLED:
         return State.DISABLED;
       case ModelState.REMOVED:
         return State.REMOVED;
+      case ModelState.ARCHIVED:
+        return State.ARCHIVED;
     }
   }
 
@@ -95,22 +94,27 @@ export class UserEntityCore<
     return this.properties.uuid;
   }
 
-  get code(): string {
+  get code(): string | null {
     return this.properties.code;
   }
 
-  get email(): string | null {
-    return this.properties.email;
+  get name(): string {
+    return this.properties.name;
+  }
+
+  get nameKana(): string {
+    return this.properties.nameKana;
+  }
+
+  get state(): State {
+    return this.properties.state;
   }
 
   get createdAt(): Date {
     return this.properties.createdAt;
   }
 
-  get tenant(): TenantEntityCore {
-    if (this.properties.tenant === undefined) {
-      throw new Error('tenant is not set');
-    }
+  get tenant(): TenantEntityCore | undefined {
     return this.properties.tenant;
   }
 }
