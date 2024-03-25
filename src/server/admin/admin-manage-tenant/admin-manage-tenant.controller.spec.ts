@@ -23,9 +23,6 @@ class ServiceMock {
   async findAll() {
     return [tenant];
   }
-  async findAllRemoved() {
-    return [tenant];
-  }
   async findByUuid(uuid: string) {
     if (uuid === tenant.uuid) {
       return tenant;
@@ -34,7 +31,7 @@ class ServiceMock {
   }
   async remove(uuid: string) {
     if (uuid === tenant.uuid) {
-      return tenant;
+      return;
     }
     throw new NotFoundException();
   }
