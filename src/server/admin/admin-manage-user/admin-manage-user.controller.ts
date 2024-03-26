@@ -9,6 +9,7 @@ import { AdminManageUserResponseDto } from './dto/admin-manage-user-response.dto
 import { AdminManageUserCreationDto } from './dto/admin-manage-user-creation-dto';
 import { ApiPagination, Pagination } from 'share/decorators/pagination.decorator';
 import { PaginationDto } from 'share/dto/pagination.dto';
+import { UserEntity } from './entities/user.entity';
 
 @Controller('admin/~/tenants/:tenantUuid/users')
 @ApiTags('user', '管理者のユーザー管理モジュール')
@@ -37,13 +38,14 @@ export class AdminManageUserController {
   ): Promise<AdminManageUserResponseDto> {
     // emailはoptional, 未指定時はnull
     const email = creationDto.email || null;
-    const user = await this.service.create(
-      tenantUuid,
-      creationDto.code,
-      creationDto.password,
+    const user = await this.service.create(tenantUuid, {
+      code: creationDto.code,
+      password: creationDto.password,
+      name: creationDto.name,
+      displayName: creationDto.displayName,
       email,
-    );
-    return this.service.toResponse(user);
+    });
+    return this.toResponse(user);
   }
 
   @Get()
@@ -65,7 +67,7 @@ export class AdminManageUserController {
     @Pagination() pagination: PaginationDto,
   ): Promise<AdminManageUserResponseDto[]> {
     const users = await this.service.findAll(tenantUuid, pagination);
-    return users.map(this.service.toResponse);
+    return users.map(this.toResponse);
   }
 
   @Get('@removed')
@@ -87,7 +89,7 @@ export class AdminManageUserController {
     @Pagination() pagination: PaginationDto,
   ): Promise<AdminManageUserResponseDto[]> {
     const users = await this.service.findAllRemoved(tenantUuid, pagination);
-    return users.map(this.service.toResponse);
+    return users.map(this.toResponse);
   }
 
   @Get(':uuid')
@@ -107,7 +109,7 @@ export class AdminManageUserController {
     @Param('uuid') uuid: string,
   ): Promise<AdminManageUserResponseDto> {
     const user = await this.service.findByUuid(tenantUuid, uuid);
-    return this.service.toResponse(user);
+    return this.toResponse(user);
   }
 
   @Delete(':uuid')
@@ -126,5 +128,15 @@ export class AdminManageUserController {
     @Param('uuid') uuid: string,
   ): Promise<void> {
     await this.service.remove(tenantUuid, uuid);
+  }
+
+  toResponse(user: UserEntity): AdminManageUserResponseDto {
+    return {
+      uuid: user.uuid,
+      name: user.name,
+      displayName: user.displayName,
+      email: user.email,
+      createdAt: user.createdAt,
+    };
   }
 }

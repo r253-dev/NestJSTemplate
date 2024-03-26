@@ -5,6 +5,8 @@ const creationSchema = userSchema
   .pick({
     code: true,
     password: true,
+    name: true,
+    displayName: true,
   })
   .extend({
     email: userSchema.shape.email.optional(),

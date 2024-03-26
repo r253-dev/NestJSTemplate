@@ -30,7 +30,12 @@ describe('事業所の管理', () => {
   test('テナント作成', async () => {
     adminToken = await getAdminToken(server, 'test@example.com', 'password');
     tenant = await createTenant(server, adminToken);
-    await registerUser(server, adminToken, tenant.uuid, { code: 'alice', password: 'password' });
+    await registerUser(server, adminToken, tenant.uuid, {
+      code: 'alice',
+      password: 'password',
+      name: 'test-user',
+      displayName: 'Test User',
+    });
     token = await getUserToken(server, tenant.code, 'alice', 'password');
   });
 
