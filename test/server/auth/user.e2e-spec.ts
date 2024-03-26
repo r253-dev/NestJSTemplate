@@ -38,6 +38,8 @@ describe('ユーザー認証 (e2e)', () => {
         .send({
           code: 'login',
           password: 'password',
+          name: 'Alice Doe',
+          displayName: 'Alice',
         });
 
       expect(response.status).toEqual(201);
@@ -67,6 +69,8 @@ describe('ユーザー認証 (e2e)', () => {
     expect(response.status).toEqual(200);
     expect(response.body).toEqual({
       uuid: loginUuid,
+      name: 'Alice Doe',
+      displayName: 'Alice',
       email: null,
       createdAt: '2024-01-02T00:00:00.000Z',
     });

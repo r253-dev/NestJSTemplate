@@ -5,6 +5,14 @@ import { PaginationDto } from 'share/dto/pagination.dto';
 import { AdminManageUserRepository, Condition } from './admin-manage-user.repository';
 import { TenantEntity } from './entities/tenant.entity';
 
+type UserCreationParams = {
+  code: string;
+  password: string;
+  email: string | null;
+  name: string;
+  displayName: string;
+};
+
 @Injectable()
 export class AdminManageUserUsecase {
   constructor(
@@ -12,20 +20,16 @@ export class AdminManageUserUsecase {
     private bcrypt: BcryptService,
   ) {}
 
-  async create(
-    tenant: TenantEntity,
-    code: string,
-    password: string,
-    email: string | null,
-  ): Promise<UserEntity> {
-    if (await this.existsByCode(tenant, code)) {
+  async create(tenant: TenantEntity, params: UserCreationParams): Promise<UserEntity> {
+    if (await this.existsByCode(tenant, params.code)) {
       throw new ConflictException('指定されたコードは既に使用されています');
     }
-    if (await this.existsByEmail(email)) {
+    if (await this.existsByEmail(params.email)) {
       throw new ConflictException('指定されたメールアドレスは既に使用されています');
     }
+    const { password, ...rest } = params;
     const passwordHash = await this.bcrypt.hash(password, 10);
-    const user = UserEntity.factory(tenant, code, passwordHash, email);
+    const user = UserEntity.factory(tenant, { ...rest, passwordHash });
     await this.repository.save(user);
     return user;
   }

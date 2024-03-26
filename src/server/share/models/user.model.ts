@@ -11,6 +11,8 @@ import {
 import { sequelize } from '../../vendors/sequelize/sequelize';
 import { TenantModel } from './tenant.model';
 
+const TABLE_NAME = 'users';
+
 export const enum State {
   INACTIVE = 0,
   ACTIVE = 1,
@@ -22,7 +24,7 @@ export class UserModel extends Model<
   InferAttributes<UserModel>,
   InferCreationAttributes<UserModel>
 > {
-  static tableName = 'users';
+  static tableName = TABLE_NAME;
 
   declare id: CreationOptional<bigint>;
   declare tenantId: ForeignKey<TenantModel['id']>;
@@ -30,6 +32,8 @@ export class UserModel extends Model<
   declare code: string;
   declare passwordHash: string | null;
   declare state: number;
+  declare name: string;
+  declare displayName: string;
   declare email: string | null;
   declare createdAt: Date;
 
@@ -69,6 +73,14 @@ UserModel.init(
       type: DataTypes.TINYINT,
       allowNull: false,
     },
+    name: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    },
+    displayName: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    },
     email: {
       type: DataTypes.STRING(512),
       allowNull: true,
@@ -81,7 +93,7 @@ UserModel.init(
   {
     sequelize,
     underscored: true,
-    modelName: 'users',
+    modelName: TABLE_NAME,
     timestamps: false,
     indexes: [
       {

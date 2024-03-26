@@ -7,21 +7,22 @@ interface Properties extends UserEntityProperties {
   tenant?: TenantEntity;
 }
 
+type FactoryProps = {
+  code: string;
+  passwordHash: string;
+  name: string;
+  displayName: string;
+  email: string | null;
+};
+
 export class UserEntity extends UserEntityCore<Properties> {
-  static factory(
-    tenant: TenantEntity,
-    code: string,
-    passwordHash: string,
-    email: string | null,
-  ): UserEntity {
+  static factory(tenant: TenantEntity, props: FactoryProps): UserEntity {
     const uuid = v4();
     return new UserEntity({
+      ...props,
       tenantId: tenant.id,
       uuid,
-      code: code,
-      passwordHash,
       state: State.ACTIVE,
-      email,
       createdAt: new Date(),
     });
   }

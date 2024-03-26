@@ -22,11 +22,13 @@ const user = UserEntity.fromModel(
   new UserModel({
     id: BigInt(1),
     tenantId: tenant.id,
-    uuid: '6e3d3a52-f69f-4b91-a2f5-8eca19ee79e3',
-    code: 'test',
+    uuid: '93cfd7c7-84a5-4f52-ac4c-f9177924d20c',
+    code: 'alice',
     passwordHash: '$2b$10$h16Y3k2LriL40/8TLjdyX.cXbSJm3FggySYpDvaUmTnaw8oGvgsZS',
     state: State.ACTIVE,
-    email: 'test@example.com',
+    name: 'Alice Doe',
+    displayName: 'Alice',
+    email: 'alice@example.com',
     createdAt: new Date('2024-03-01T00:00:00+09:00'),
   }),
 );
@@ -81,6 +83,8 @@ describe('AdminManageUserController', () => {
       const response = await request(server).post(`/admin/~/tenants/${tenant.uuid}/users`).send({
         code: 'test',
         password: 'password',
+        name: 'test-user',
+        displayName: 'Test User',
       });
       expect(response.status).toEqual(201);
     });
@@ -89,6 +93,8 @@ describe('AdminManageUserController', () => {
       const response = await request(server).post(`/admin/~/tenants/${tenant.uuid}/users`).send({
         code: 'test',
         password: 'password',
+        name: 'test-user',
+        displayName: 'Test User',
         email: 'test@example.com',
       });
       expect(response.status).toEqual(201);
@@ -98,6 +104,8 @@ describe('AdminManageUserController', () => {
       const response = await request(server).post(`/admin/~/tenants/${tenant.uuid}/users`).send({
         code: 'test',
         password: 'password',
+        name: 'test-user',
+        displayName: 'Test User',
         email: 'invalid-email',
       });
       expect(response.status).toEqual(400);
@@ -119,6 +127,8 @@ describe('AdminManageUserController', () => {
       const response = await request(server).post(`/admin/~/tenants/${tenant.uuid}/users`).send({
         code: 'test',
         password: '1234567',
+        name: 'test-user',
+        displayName: 'Test User',
         email: 'test@example.com',
       });
       expect(response.status).toEqual(400);
@@ -160,6 +170,20 @@ describe('AdminManageUserController', () => {
             expected: 'string',
             received: 'undefined',
           },
+          {
+            code: 'invalid_type',
+            message: 'Required',
+            path: ['name'],
+            expected: 'string',
+            received: 'undefined',
+          },
+          {
+            code: 'invalid_type',
+            message: 'Required',
+            path: ['displayName'],
+            expected: 'string',
+            received: 'undefined',
+          },
         ],
       });
     });
@@ -170,8 +194,10 @@ describe('AdminManageUserController', () => {
       const response = await request(server).get(`/admin/~/tenants/${tenant.uuid}/users`);
       expect(response.status).toEqual(200);
       expect(response.body[0]).toEqual({
-        uuid: user.uuid,
-        email: 'test@example.com',
+        uuid: '93cfd7c7-84a5-4f52-ac4c-f9177924d20c',
+        name: 'Alice Doe',
+        displayName: 'Alice',
+        email: 'alice@example.com',
         createdAt: '2024-02-29T15:00:00.000Z',
       });
       expect(response.body.length).toEqual(25);
@@ -186,8 +212,10 @@ describe('AdminManageUserController', () => {
       });
       expect(response.status).toEqual(200);
       expect(response.body[0]).toEqual({
-        uuid: user.uuid,
-        email: 'test@example.com',
+        uuid: '93cfd7c7-84a5-4f52-ac4c-f9177924d20c',
+        name: 'Alice Doe',
+        displayName: 'Alice',
+        email: 'alice@example.com',
         createdAt: '2024-02-29T15:00:00.000Z',
       });
       expect(response.body.length).toEqual(50);

@@ -38,12 +38,16 @@ describe('テナント内のユーザー管理 (e2e)', () => {
         .send({
           code: 'alice',
           password: 'password',
+          name: 'Alice Doe',
+          displayName: 'Alice',
           email: 'alice@example.com',
         });
 
       expect(response.status).toEqual(201);
       expect(response.body).toEqual({
         uuid: expect.any(String),
+        name: 'Alice Doe',
+        displayName: 'Alice',
         email: 'alice@example.com',
         createdAt: '2024-01-02T00:00:00.000Z',
       });
@@ -58,6 +62,8 @@ describe('テナント内のユーザー管理 (e2e)', () => {
       .send({
         code: 'alice',
         password: 'password',
+        name: 'Alice Doe',
+        displayName: 'Alice',
         email: 'alice2@example.com',
       });
 
@@ -77,11 +83,15 @@ describe('テナント内のユーザー管理 (e2e)', () => {
       .send({
         code: 'alice',
         password: 'password',
+        name: 'Alice Doe',
+        displayName: 'Alice',
       });
 
     expect(response.status).toEqual(201);
     expect(response.body).toEqual({
       uuid: expect.any(String),
+      name: 'Alice Doe',
+      displayName: 'Alice',
       email: null,
       createdAt: expect.any(String),
     });
@@ -95,6 +105,8 @@ describe('テナント内のユーザー管理 (e2e)', () => {
       .send({
         code: 'alice',
         password: 'password',
+        name: 'Alice Doe',
+        displayName: 'Alice',
         email: 'alice@example.com',
       });
 
@@ -115,6 +127,8 @@ describe('テナント内のユーザー管理 (e2e)', () => {
     expect(response.body).toEqual([
       {
         uuid: expect.any(String),
+        name: 'Alice Doe',
+        displayName: 'Alice',
         email: 'alice@example.com',
         createdAt: '2024-01-02T00:00:00.000Z',
       },
@@ -129,6 +143,8 @@ describe('テナント内のユーザー管理 (e2e)', () => {
     expect(response.status).toEqual(200);
     expect(response.body).toEqual({
       uuid: expect.any(String),
+      name: 'Alice Doe',
+      displayName: 'Alice',
       email: 'alice@example.com',
       createdAt: '2024-01-02T00:00:00.000Z',
     });
@@ -174,6 +190,8 @@ describe('テナント内のユーザー管理 (e2e)', () => {
     expect(response.body).toEqual([
       {
         uuid: expect.any(String),
+        name: 'Alice Doe',
+        displayName: 'Alice',
         email: 'alice@example.com',
         createdAt: '2024-01-02T00:00:00.000Z',
       },

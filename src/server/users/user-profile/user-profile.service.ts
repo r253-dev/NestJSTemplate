@@ -3,11 +3,13 @@ import { UserEntityCore } from 'share/entities/user.core.entity';
 
 @Injectable()
 export class UserProfileService {
-  getProfile(admin: UserEntityCore) {
+  getProfile(user: UserEntityCore) {
     return {
-      uuid: admin.uuid,
-      email: admin.email,
-      createdAt: admin.createdAt,
+      uuid: user.uuid,
+      name: user.name,
+      displayName: user.displayName,
+      email: user.email,
+      createdAt: user.createdAt,
     };
   }
 }

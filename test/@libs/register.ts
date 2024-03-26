@@ -5,15 +5,12 @@ export async function registerUser(
   server: any,
   adminToken: string,
   tenantUuid: string,
-  { code, password }: AdminManageUserCreationDto,
+  params: AdminManageUserCreationDto,
 ) {
   const response = await request(server)
     .post(`/v1/admin/~/tenants/${tenantUuid}/users`)
     .set('Authorization', `Bearer ${adminToken}`)
-    .send({
-      code,
-      password,
-    });
+    .send({ ...params });
 
   expect(response.status).toEqual(201);
 }

@@ -20,6 +20,8 @@ export interface UserEntityProperties extends PropertiesCore, PropertiesEssentia
   uuid: string;
   passwordHash: string | null;
   state: State;
+  name: string;
+  displayName: string;
   email: string | null;
   createdAt: Date;
 
@@ -37,6 +39,8 @@ export class UserEntityCore<
       code: this.properties.code,
       passwordHash: this.properties.passwordHash,
       state: UserEntityCore.toModel$state(this.properties.state),
+      name: this.properties.name,
+      displayName: this.properties.displayName,
       email: this.properties.email,
       createdAt: this.properties.createdAt,
     });
@@ -71,6 +75,8 @@ export class UserEntityCore<
       code: model.code,
       passwordHash: model.passwordHash,
       state: this.fromModel$State(model.state),
+      name: model.name,
+      displayName: model.displayName,
       email: model.email,
       createdAt: model.createdAt,
 
@@ -97,6 +103,14 @@ export class UserEntityCore<
 
   get code(): string {
     return this.properties.code;
+  }
+
+  get name(): string {
+    return this.properties.name;
+  }
+
+  get displayName(): string {
+    return this.properties.displayName;
   }
 
   get email(): string | null {

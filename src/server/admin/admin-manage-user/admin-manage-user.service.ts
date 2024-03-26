@@ -1,11 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { AdminManageUserUsecase } from './admin-manage-user.usecase';
 import { UserEntity } from './entities/user.entity';
-import { AdminManageUserResponseDto } from './dto/admin-manage-user-response.dto';
 import { PaginationDto } from 'share/dto/pagination.dto';
 import { State } from 'share/entities/user.core.entity';
 import { AdminManageTenantService } from 'admin/admin-manage-tenant/admin-manage-tenant.service';
 import { TenantEntity } from './entities/tenant.entity';
+
+type UserCreationParams = {
+  code: string;
+  password: string;
+  email: string | null;
+  name: string;
+  displayName: string;
+};
 
 @Injectable()
 export class AdminManageUserService {
@@ -14,14 +21,9 @@ export class AdminManageUserService {
     private usecase: AdminManageUserUsecase,
   ) {}
 
-  async create(
-    tenantUuid: string,
-    code: string,
-    password: string,
-    email: string | null,
-  ): Promise<UserEntity> {
+  async create(tenantUuid: string, params: UserCreationParams): Promise<UserEntity> {
     const tenant = await this.findTenantByUuid(tenantUuid);
-    const user = await this.usecase.create(tenant, code, password, email);
+    const user = await this.usecase.create(tenant, params);
     return user;
   }
 
@@ -54,13 +56,5 @@ export class AdminManageUserService {
   private async findTenantByUuid(uuid: string): Promise<TenantEntity> {
     const tenant = await this.tenantService.findByUuid(uuid);
     return TenantEntity.fromEntity(tenant);
-  }
-
-  toResponse(user: UserEntity): AdminManageUserResponseDto {
-    return {
-      uuid: user.uuid,
-      email: user.email,
-      createdAt: user.createdAt,
-    };
   }
 }
