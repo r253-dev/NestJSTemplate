@@ -105,6 +105,10 @@ export class UserEntityCore<
     return this.properties.code;
   }
 
+  get state(): State {
+    return this.properties.state;
+  }
+
   get name(): string {
     return this.properties.name;
   }

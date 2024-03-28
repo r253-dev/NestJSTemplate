@@ -27,7 +27,7 @@ describe('事業所の管理', () => {
   let token = '';
   let organizationUuid = '';
 
-  test('テナント作成', async () => {
+  beforeAll(async () => {
     adminToken = await getAdminToken(server, 'test@example.com', 'password');
     tenant = await createTenant(server, adminToken);
     await registerUser(server, adminToken, tenant.uuid, {

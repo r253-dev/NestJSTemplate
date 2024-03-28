@@ -15,7 +15,7 @@ module.exports = async () => {
     });
 
   try {
-    await sequelize.sync();
+    await sequelize.sync({ force: true });
     await initializeAdministrator();
     await initializeTenant();
     await initializePrefecture();
